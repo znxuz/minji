@@ -18,6 +18,7 @@ namespace
 	void print_menu()
 	{
 		std::cout << "options\n"
+			"(0) end\n"
 			"(1) add\n"
 			"(2) remove\n"
 			"(3) change\n"
