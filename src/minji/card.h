@@ -1,25 +1,26 @@
 #pragma once
 
 #include <iostream>
+#include <memory>
 
-#include "card_back.h"
+#include "answer.h"
 
 namespace minji
 {
 	class card
 	{
 	public:
-		card(std::string front, card_back ans, std::string group = "");
+		card(std::string front, std::unique_ptr<answer> ans, std::string group = "");
 		std::string& front();
 		const std::string& front() const;
-		card_back& back();
-		const card_back& back() const;
-		void print(std::ostream& os = std::cout) const;
-		friend std::ostream& operator<<(std::ostream& os, const card& c);
+		answer& back();
+		const answer& back() const;
 
 	private:
 		std::string _front;
-		std::unique_ptr<card_back> _ans;
+		std::unique_ptr<answer> _ans;
 		std::string _group;
 	};
+
+	std::ostream& operator<<(std::ostream&, const minji::card&);
 }

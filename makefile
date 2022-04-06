@@ -9,7 +9,7 @@ WARNINGS := -Wall -Wextra -Wpedantic -Weffc++ -Wconversion -Wshadow -Wnon-virtua
 			-Wcast-align -Woverloaded-virtual -Wnull-dereference \
 			-Wno-unused-parameter -Wno-unused-function
 SAN := -fsanitize=address,undefined
-CFLAGS := -x $(LANG) -std=$(STD) $(WARNINGS) -g -O0
+CFLAGS := -x $(LANG) -std=$(STD) $(WARNINGS)
 
 src := $(shell find $(SRC_DIR) -type f -name "*cpp")
 obj := $(src:.cpp=.o)
@@ -20,6 +20,10 @@ run: generate_cc $(NAME)
 	@./$(NAME) $(ARGS)
 
 rerun: fclean run
+
+debug: CFLAGS += -g -DDEBUG=1
+
+debug: fclean run
 
 $(NAME): $(obj)
 	$(CC) $(obj) $(SAN) -o $(NAME)
