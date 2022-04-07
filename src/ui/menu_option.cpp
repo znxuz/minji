@@ -2,33 +2,11 @@
 
 namespace menu
 {
-	std::istream& operator>>(std::istream& is, menu::option& opt)
+	std::istream& operator>>(std::istream& is, option& opt)
 	{
-		unsigned input;
+		int input = 0;
 		is >> input;
-
-		switch (input) {
-			case 0:
-				opt = menu::option::end;
-				break;
-			case 1:
-				opt = menu::option::add;
-				break;
-			case 2:
-				opt = menu::option::remove;
-				break;
-			case 3:
-				opt = menu::option::change;
-				break;
-			case 4:
-				opt = menu::option::list;
-				break;
-		}
-
-		if (is.eof()) {
-			opt = menu::option::end;
-			return is;
-		}
+		opt = static_cast<option>(input);
 
 		return is;
 	}
@@ -45,8 +23,11 @@ namespace menu
 			case menu::option::remove:
 				os << "remove\n";
 				break;
-			case menu::option::change:
-				os << "change\n";
+			case menu::option::change_card:
+				os << "change card\n";
+				break;
+			case menu::option::change_category:
+				os << "change category\n";
 				break;
 			case menu::option::list:
 				os << "list\n";

@@ -11,8 +11,7 @@ namespace minji
 	{
 	public:
 		plain_answer(std::string) noexcept;
-
-		friend std::ostream& operator<<(std::ostream&, const plain_answer&);
+		bool operator==(const plain_answer&) const;
 
 	private:
 		std::string _ans;

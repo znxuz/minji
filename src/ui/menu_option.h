@@ -6,7 +6,7 @@ namespace menu
 {
 	enum class option
 	{
-		end, add, remove, change, list
+		end = 0, add, remove, change_card, change_category, list
 	};
 
 	std::istream& operator>>(std::istream& is, menu::option& opt);
