@@ -1,16 +1,17 @@
+#include <compare>
 #include <ios>
 #include <limits>
 #include <memory>
 
 #include "simple_menu.h"
-#include "menu_option.h"
 #include "../minji/category.h"
+#include "menu_option.h"
 
 namespace
 {
 	std::weak_ptr<minji::category> choose_category(std::vector<std::shared_ptr<minji::category>>& categories)
 	{
-		std::weak_ptr<minji::category> chosen_cty;
+		std::weak_ptr<minji::category> chosen;
 		bool make_new = categories.empty();
 
 		if (!make_new) {
@@ -29,7 +30,7 @@ namespace
 				else if (choice == 0)
 					make_new = true;
 				else
-					chosen_cty = categories[choice - 1];
+					chosen = categories[choice - 1];
 			} while (!std::cin.eof() && std::cin.fail());
 		}
 
@@ -37,7 +38,7 @@ namespace
 			std::cout << "create a category:\n";
 			std::string name;
 			do {
-				std::cout << "  enter a name: ";
+				std::cout << "  enter a name >> ";
 				std::getline(std::cin, name);
 			} while (!std::cin.eof() && std::cin.fail());
 
@@ -48,53 +49,59 @@ namespace
 			return categories.back();
 		}
 
-		return chosen_cty;
+		return chosen;
 	}
 
-	void print_menu(const std::weak_ptr<minji::category>& cty)
+	void remove_category(std::vector<std::shared_ptr<minji::category>>& categories)
 	{
-		std::cout << "options for category " << cty.lock()->name() << "\n"
-			"  (0) end\n"
-			"  (1) add\n"
-			"  (2) remove\n"
-			"  (3) change_card\n"
-			"  (4) change_category\n"
-			"  (5) list\n"
-			"\n"
-			"  >> ";
+		// TODO
 	}
 
-	menu::option parse_input(const std::weak_ptr<minji::category>& cty)
+	menu::option parse_input(menu::option prev_opt)
 	{
+		if (prev_opt != menu::option::print_menu)
+			return menu::option::print_menu;
+
 		menu::option opt = menu::option::end;
-		while (!(std::cin >> opt)) {
-			// FIXME
+		while (!(std::cin >> opt) && !std::cin.eof()) {
+			std::cerr << "  invalid option, try again\n";
+			std::cin.clear();
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+			menu::print_menu();
 		}
 
+		if (std::cin.eof())
+			return menu::option::end;
 		return opt;
 	}
 
-
-
-	void exec_opt(menu::option opt)
+	void exec_opt(menu::option opt, std::weak_ptr<minji::category>& cty,
+			std::vector<std::shared_ptr<minji::category>>& categories)
 	{
+		switch (opt) {
+			case menu::option::print_menu:
+				menu::print_menu();
+				break;
+			case menu::option::change_category:
+				cty = choose_category(categories);
+				break;
+			case menu::option::remove_category:
+				remove_category(categories);
+		}
 		// TODO
 	}
 }
 
-void simple_menu()
+void simple_menu(std::vector<std::shared_ptr<minji::category>> categories)
 {
-	std::vector<std::shared_ptr<minji::category>> categories;
-	std::weak_ptr<minji::category> chosen_cty;
-	menu::option opt = menu::option::end;
+	std::weak_ptr<minji::category> cty;
+	menu::option opt = menu::option::change_category;
 	do {
-		if (!chosen_cty.lock() || opt == menu::option::change_category) {
-			chosen_cty = choose_category(categories);
-			if (!chosen_cty.lock())
-				break;
-		}
 		std::cout << '\n';
-		opt = parse_input(chosen_cty);
-		exec_opt(opt);
+		exec_opt(opt, cty, categories);
+		if (cty.lock())
+			opt = parse_input(opt);
+		else
+			opt = menu::option::end;
 	} while (opt != menu::option::end);
 }

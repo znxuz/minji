@@ -7,9 +7,9 @@ namespace minji
 	category::category(std::string name) : _name(name)
 	{ }
 
-	void category::add(std::unique_ptr<card> c)
+	void category::add(std::unique_ptr<card>&& c)
 	{
-		_cards.emplace_back(std::move(c));
+		_cards.push_back(std::move(c));
 	}
 
 	void category::remove(std::vector<std::unique_ptr<card>>::iterator it)
@@ -17,7 +17,7 @@ namespace minji
 		_cards.erase(it);
 	}
 
-	void category::replace(std::vector<std::unique_ptr<card>>::iterator it, std::unique_ptr<card> c)
+	void category::replace(std::vector<std::unique_ptr<card>>::iterator it, std::unique_ptr<card>&& c)
 	{
 		*it = std::move(c);
 	}

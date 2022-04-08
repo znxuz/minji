@@ -2,7 +2,7 @@
 
 namespace minji
 {
-	card::card(std::string front, std::unique_ptr<answer> ans, std::string category) :
+	card::card(std::string front, std::unique_ptr<answer>&& ans, std::string category) :
 		_front(std::move(front)),
 		_ans(std::move(ans)),
 		_category(std::move(category))
