@@ -7,7 +7,7 @@ LANG := c++
 STD := c++20
 WARNINGS := -Wall -Wextra -Wpedantic -Weffc++ -Wconversion -Wshadow -Wnon-virtual-dtor \
 			-Wcast-align -Woverloaded-virtual -Wnull-dereference \
-			-Wno-unused-parameter -Wno-unused-function
+			-Wno-unused-parameter -Wno-unused-function -Wno-unused-variable
 SAN := -fsanitize=address,undefined
 CFLAGS := -x $(LANG) -std=$(STD) $(WARNINGS)
 

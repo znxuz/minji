@@ -3,7 +3,7 @@
 namespace minji
 {
 	plain_answer::plain_answer(std::string ans) noexcept : _ans(std::move(ans))
-	{ }
+	{}
 
 	bool plain_answer::operator==(const plain_answer& pa) const
 	{

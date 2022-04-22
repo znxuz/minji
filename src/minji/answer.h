@@ -7,8 +7,9 @@ namespace minji
 	class answer
 	{
 	public:
-		virtual ~answer() = default;
-		friend std::ostream& operator<<(std::ostream& os, const minji::answer& ans) { return ans.output(os); }
+		virtual ~answer() noexcept = default;
+		friend std::ostream& operator<<(std::ostream& os, const minji::answer& ans)
+		{ return ans.output(os); }
 
 	private:
 		virtual std::ostream& output(std::ostream&) const = 0;

@@ -1,35 +1,62 @@
 #pragma once
 
 #include <iostream>
+#include <array>
 
 namespace menu
 {
-	enum class option
+	enum class opt
 	{
-		print_menu = 0, add, remove, change_card, change_category, remove_category, list, end
+		add_card = 'a', remove_card = 'r', change_card = 'c', list_card = 'l', add_cty = 'A', remove_cty = 'R', change_cty = 'C', list_cty = 'L', exit = 'e'
 	};
 
-	inline std::istream& operator>>(std::istream& is, menu::option& opt)
+	static constexpr std::array<opt, 9> opts
 	{
-		int input = 0;
+		opt::add_card, opt::remove_card, opt::change_card, opt::list_card,
+			opt::add_cty, opt::remove_cty, opt::change_cty, opt::list_cty, opt::exit
+	};
+
+	inline std::istream& operator>>(std::istream& is, opt& op)
+	{
+		char input;
 		is >> input;
-		opt = static_cast<option>(input);
+
+		op = static_cast<opt>(input);
+		if (std::find(begin(opts), end(opts), op) == opts.end())
+			is.setstate(std::ios::failbit);
 
 		return is;
 	}
 
-	inline void print_menu()
+	inline std::ostream& operator<<(std::ostream& os, const opt& opt)
 	{
-		std::cout << "options for category " << "\n"
-			"  (1) add\n"
-			"  (2) remove\n"
-			"  (3) edit\n"
-			"  (4) change category\n"
-			"  (5) remove category\n"
-			"  (6) list\n"
-			"  (7) end\n"
-			"\n"
-			"  >> ";
+		switch (opt) {
+			case opt::add_card:
+				return (os << "(a)dd card");
+			case opt::remove_card:
+				return (os << "(r)emove card");
+			case opt::change_card:
+				return (os << "(c)hange card");
+			case opt::list_card:
+				return (os << "(l)ist card");
+			case opt::add_cty:
+				return (os << "(A)dd category");
+			case opt::remove_cty:
+				return (os << "(R)emove category");
+			case opt::change_cty:
+				return (os << "(C)hange category");
+			case opt::list_cty:
+				return (os << "(L)ist category");
+			case opt::exit:
+				return (os << "(e)xit");
+		}
+	}
+
+	inline void print_opts()
+	{
+		std::cout << "select options: \n";
+		for (auto opt : opts)
+			std::cout << "  - " << opt << '\n';
 	}
 
 }

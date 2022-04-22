@@ -5,19 +5,19 @@
 namespace minji
 {
 	category::category(std::string name) : _name(name)
-	{ }
+	{}
 
-	void category::add(std::unique_ptr<card>&& c)
+	void category::add(card&& c)
 	{
 		_cards.push_back(std::move(c));
 	}
 
-	void category::remove(std::vector<std::unique_ptr<card>>::iterator it)
+	void category::remove(std::vector<card>::iterator it)
 	{
 		_cards.erase(it);
 	}
 
-	void category::replace(std::vector<std::unique_ptr<card>>::iterator it, std::unique_ptr<card>&& c)
+	void category::replace(std::vector<card>::iterator it, card c)
 	{
 		*it = std::move(c);
 	}
@@ -34,6 +34,11 @@ namespace minji
 
 	void category::list() const
 	{
-		std::for_each(begin(_cards), end(_cards), [](const auto& c) { std::cout << *c; });
+		std::for_each(begin(_cards), end(_cards), [](const auto& c) { std::cout << c; });
+	}
+
+	bool category::operator==(const category& rhs) const
+	{
+		return this->_name == rhs._name && this->_cards == rhs._cards;
 	}
 }

@@ -10,12 +10,12 @@ namespace minji
 	class card
 	{
 	public:
-		card(std::string, std::unique_ptr<answer>&&, std::string category = "default");
+		card(std::string front, std::unique_ptr<answer>&& ans, std::string cty);
 		std::string& front();
 		const std::string& front() const;
 		answer& back();
 		const answer& back() const;
-		bool operator==(const card&) const;
+		bool operator==(const card& c) const;
 
 	private:
 		std::string _front;

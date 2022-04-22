@@ -6,7 +6,7 @@ namespace minji
 		_front(std::move(front)),
 		_ans(std::move(ans)),
 		_category(std::move(category))
-	{ }
+	{}
 
 	std::string& card::front()
 	{
