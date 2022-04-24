@@ -7,7 +7,8 @@ namespace menu
 {
 	enum class opt
 	{
-		add_card = 'a', remove_card = 'r', change_card = 'c', list_card = 'l', add_cty = 'A', remove_cty = 'R', change_cty = 'C', list_cty = 'L', exit = 'e'
+		add_card = 'a', remove_card = 'r', change_card = 'c', list_card = 'l',
+		add_cty = 'A', remove_cty = 'R', change_cty = 'C', list_cty = 'L', exit = 'e'
 	};
 
 	static constexpr std::array<opt, 9> opts

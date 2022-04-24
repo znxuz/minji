@@ -1,7 +1,7 @@
 #include <iostream>
 #include <memory>
 
-#include "ui/interactive_menu.h"
+#include "ui/i_menu.h"
 #include "minji/card.h"
 #include "minji/plain_answer.h"
 #include "minji/category.h"
@@ -9,5 +9,5 @@
 
 int main(int argc, char** argv)
 {
-	interactive_menu();
+	i_menu();
 }

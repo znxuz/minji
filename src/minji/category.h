@@ -1,5 +1,6 @@
 #pragma once
 
+#include <iostream>
 #include <string>
 #include <vector>
 
@@ -16,7 +17,7 @@ namespace minji
 		void add(card&&);
 		void remove(std::vector<card>::iterator);
 		void replace(std::vector<card>::iterator, card);
-		void list() const;
+		void list(std::ostream& os) const;
 		bool operator==(const category& rhs) const;
 
 	private:

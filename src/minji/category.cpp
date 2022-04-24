@@ -32,9 +32,14 @@ namespace minji
 		return const_cast<category*>(this)->name();
 	}
 
-	void category::list() const
+	void category::list(std::ostream& os) const
 	{
-		std::for_each(begin(_cards), end(_cards), [](const auto& c) { std::cout << c; });
+		const std::string sep = "= = = = = = = = = = = =\n";
+		os << sep;
+		auto print = [&os, &sep](const card& c) {
+			os << c << sep;
+		};
+		std::for_each(begin(_cards), end(_cards), print);
 	}
 
 	bool category::operator==(const category& rhs) const

@@ -15,4 +15,3 @@ namespace minji
 	std::unique_ptr<answer> make_answer(std::vector<std::string> choices,
 			std::vector<int> correct_indices);
 }
-

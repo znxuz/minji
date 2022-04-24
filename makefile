@@ -11,17 +11,17 @@ WARNINGS := -Wall -Wextra -Wpedantic -Weffc++ -Wconversion -Wshadow -Wnon-virtua
 SAN := -fsanitize=address,undefined
 CFLAGS := -x $(LANG) -std=$(STD) $(WARNINGS)
 
-src := $(shell find $(SRC_DIR) -type f -name "*cpp")
+src := $(shell find $(SRC_DIR) -type f -name "*.cpp")
 obj := $(src:.cpp=.o)
 
 all: run
 
 run: generate_cc $(NAME)
-	@./$(NAME) $(ARGS)
+	./$(NAME) $(ARGS)
 
 rerun: fclean run
 
-debug: CFLAGS += -g -DDEBUG=1
+debug: CFLAGS += -g -DDEBUG=1 -O0
 
 debug: fclean run
 
@@ -36,6 +36,7 @@ clean:
 
 fclean: clean
 	$(RM) $(NAME)
+	find . -type f -name "*.o" -delete
 
 generate_cc:
 	@echo $(CFLAGS) | sed 's/\s/\n/g' > compile_flags.txt
