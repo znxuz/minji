@@ -1,17 +1,26 @@
 #pragma once
 
+#include <memory>
 #include <ostream>
 
 namespace minji
 {
-	class answer
-	{
+    class answer
+    {
 	public:
-		virtual ~answer() noexcept = default;
-		friend std::ostream& operator<<(std::ostream& os, const minji::answer& ans)
-		{ return ans.output(os); }
+	    std::unique_ptr<answer> clone() const
+	    {
+		return std::unique_ptr<answer>(this->clone_impl());
+	    }
+	    virtual ~answer() noexcept = default;
+	    friend std::ostream& operator<<(std::ostream& os,
+		    const minji::answer& ans)
+	    {
+		return ans.output(os);
+	    }
 
 	private:
-		virtual std::ostream& output(std::ostream&) const = 0;
-	};
+	    virtual answer* clone_impl() const = 0;
+	    virtual std::ostream& output(std::ostream&) const = 0;
+    };
 }

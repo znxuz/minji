@@ -5,40 +5,40 @@
 #include <vector>
 #include <memory>
 
-#include "../minji/category.h"
+#include "../minji/deck.h"
 
 namespace minji
 {
-	constexpr static std::string_view invalid_input = "[Error] invalid input, try again\n";
-	constexpr static std::string_view prompt = "  > ";
+    constexpr static std::string_view invalid_input = "[Error] invalid input, try again\n";
+    constexpr static std::string_view prompt = "  > ";
 
-	inline auto default_parse_validate = [](auto) { return false; };
-	inline auto err_print = []() { std::cerr << invalid_input; };
+    inline auto default_validate = [](auto) { return false; };
 
-	inline void flush()
-	{
-		std::cin.clear();
-		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    inline void flush()
+    {
+	std::cin.clear();
+	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    }
+
+    template<typename T, typename V>
+    bool parse_input(T& t, V& v)
+    {
+	while (std::cout << "  > " && (!(std::cin >> t) || v(t))) {
+	    if (std::cin.eof())
+		return false;
+	    std::cerr << invalid_input;
+	    flush();
 	}
+	flush();
 
-	template<typename T>
-	bool parse_input(T& t, bool (*validate)(const T&) = default_parse_validate,
-			void (*handle)() = err_print)
-	{
-		while (std::cout << "  > " &&
-				(!(std::cin >> t) || validate(t))) {
-			if (std::cin.eof())
-				 return false;
-			if (validate(t))
-				handle();
-			else
-				err_print();
-			flush();
-		}
-		flush();
+	return true;
+    }
 
-		return true;
-	}
+    template<typename T>
+    bool parse_input(T& t)
+    {
+	return parse_input(t, default_validate);
+    }
 }
 
-void i_menu(std::vector<std::shared_ptr<minji::category>> categories = {});
+void i_menu(std::vector<std::shared_ptr<minji::deck>> decks = {});

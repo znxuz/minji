@@ -2,3 +2,4 @@
 *.out
 *.a
 compile_flags.txt
+Session.vim

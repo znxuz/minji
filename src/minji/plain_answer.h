@@ -7,15 +7,16 @@
 
 namespace minji
 {
-	class plain_answer : public answer
-	{
+    class plain_answer : public answer
+    {
 	public:
-		plain_answer(std::string) noexcept;
-		bool operator==(const plain_answer&) const;
+	    plain_answer(std::string) noexcept;
+	    bool operator==(const plain_answer&) const;
 
 	private:
-		std::string _ans;
+	    std::string _ans;
 
-		std::ostream& output(std::ostream&) const override;
-	};
+	    std::ostream& output(std::ostream&) const override;
+	    plain_answer* clone_impl() const override;
+    };
 }
