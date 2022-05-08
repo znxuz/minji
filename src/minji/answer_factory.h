@@ -12,6 +12,5 @@
 namespace minji
 {
     std::unique_ptr<answer> make_answer(std::string plain);
-    std::unique_ptr<answer> make_answer(std::vector<std::string> choices,
-	    std::vector<int> correct_indices);
+    std::unique_ptr<answer> make_answer(std::vector<std::pair<std::string, bool>> choices);
 }

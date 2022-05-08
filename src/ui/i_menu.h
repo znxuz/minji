@@ -20,10 +20,9 @@ namespace minji
 	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     }
 
-    template<typename T, typename V>
-    bool parse_input(T& t, V& v)
+    template<typename T, typename V> bool parse_input(T& t, V& v)
     {
-	while (std::cout << "  > " && (!(std::cin >> t) || v(t))) {
+	while (std::cout << prompt && (!(std::cin >> t) || v(t))) {
 	    if (std::cin.eof())
 		return false;
 	    std::cerr << invalid_input;
@@ -34,11 +33,21 @@ namespace minji
 	return true;
     }
 
-    template<typename T>
-    bool parse_input(T& t)
+    template<typename T> bool parse_input(T& t)
     {
 	return parse_input(t, default_validate);
     }
+
+    template<> inline bool parse_input<std::string>(std::string& t)
+    {
+	while (std::cout << prompt && (!getline(std::cin, t))) {
+	    if (std::cin.eof())
+		return false;
+	    std::cerr << invalid_input;
+	}
+	return true;
+    }
+
 }
 
 void i_menu(std::vector<std::shared_ptr<minji::deck>> decks = {});

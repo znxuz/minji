@@ -150,12 +150,44 @@ namespace
 	    return;
 	switch (*type) {
 	    case minji::answer_type::plain:
-		std::string plain_ans;
-		std::cout << "[input] plain answer:\n";
-		if (!minji::parse_input(plain_ans))
-		    return;
-		opt_back = minji::make_answer(plain_ans);
-		break;
+		{
+		    std::string plain_ans;
+		    std::cout << "[input] plain answer:\n";
+		    if (!minji::parse_input(plain_ans))
+			return;
+		    opt_back = minji::make_answer(std::move(plain_ans));
+		    break;
+		}
+	    case minji::answer_type::multiple_choice:
+		{
+		    unsigned ans_count;
+		    std::string sure;
+		    do {
+			std::cout << "[input] total number of choices: (enter zero to cancel)\n";
+			if (!minji::parse_input(ans_count) || !ans_count)
+			    return;
+			std::cout << "[confirm] total choices: " << ans_count <<
+			    ", sure? [(y)es/(n)o/(c)ancel]\n";
+			if (!minji::parse_input(sure) || sure == "c")
+			    return;
+		    } while (!sure.empty() && sure != "y");
+
+		    std::vector<std::pair<std::string, bool>> choices(ans_count);
+		    for (unsigned i = 0; i < ans_count; ++i) {
+			std::cout << "[input] enter answer (" << (i + 1) << ")\n" << minji::prompt;
+			std::string ans;
+			if (!std::getline(std::cin, ans))
+			    return;
+			std::cout << "[confirm] is this answer the correct one? [(y)es/(n)o/(c)ancel]\n";
+			std::string confirm;
+			if (!minji::parse_input(confirm) || confirm == "c")
+			    return;
+			choices[i] = std::pair(std::move(ans), (confirm == "y"));
+			std::cout << "[message] added the following answer: " << choices[i].first <<
+			    " (" << std::boolalpha << choices[i].second << ")\n";
+		    }
+		    opt_back = minji::make_answer(std::move(choices));
+		}
 	}
     }
 
@@ -231,9 +263,11 @@ namespace
 		change_card();
 		break;
 	    case menu::opt::list_card:
-		std::cout << "[List] deck:\n";
+		std::cout << "[List] cards:\n";
 		list_card();
-		std::cout << "press any key to continue..."; minji::flush();
+		// TODO list content of card by index
+		std::cout << "press any key to continue...\n";
+		minji::flush();
 		break;
 	    case menu::opt::add_deck:
 		add_deck(decks);
@@ -247,9 +281,10 @@ namespace
 		change_deck(decks);
 		break;
 	    case menu::opt::list_deck:
-		std::cout << "[List] deck:\n";
+		std::cout << "[List] decks:\n";
 		list_deck(decks);
-		std::cout << "press any key to continue..."; minji::flush();
+		std::cout << "press any key to continue...\n";
+		minji::flush();
 		break;
 	    case menu::opt::exit:
 		break;
