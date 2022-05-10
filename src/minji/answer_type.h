@@ -29,9 +29,9 @@ namespace minji
     {
 	switch (ans_type) {
 	    case answer_type::plain:
-		return os << "plain";
+		return (os << "plain");
 	    case answer_type::multiple_choice:
-		return os << "multiple choice";
+		return (os << "multiple choice");
 	}
     }
 

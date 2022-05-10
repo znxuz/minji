@@ -12,11 +12,12 @@ namespace minji
     {
 	public:
 	    deck(std::string);
-	    std::string& name();
-	    const std::string& name() const;
 	    void add(card);
 	    void remove(std::vector<card>::iterator);
 	    void replace(std::vector<card>::iterator, card);
+	    std::string& name();
+	    const std::string& name() const;
+	    void show_card(std::ostream&, size_t) const;
 	    size_t size() const;
 	    bool operator==(const deck& rhs) const;
 	    std::vector<card>::iterator begin() { return _cards.begin(); }

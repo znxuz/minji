@@ -26,6 +26,12 @@ std::vector<std::shared_ptr<minji::deck>> get_decks()
 	    .front("ques3")
 	    .back(minji::make_answer("plain3"))
 	    .build());
+    d1->add(minji::card_builder::init(d1->name())
+	    .description("mult")
+	    .front("ques mult")
+	    .back(minji::make_answer({{"ans1", true}, {"ans2", false}}))
+	    .build());
+
 
     return {std::move(d1)};
 }

@@ -16,7 +16,9 @@ namespace minji
     std::ostream& multi_answer::output(std::ostream& os) const
     {
 	for (size_t i = 0; i < _choices.size(); ++i)
-	    os << "- " << _choices[i].first << (i + 1 == _choices.size() ? "" : "\n");
+	    os << "- " << _choices[i].first <<
+		"\n  -> " << std::boolalpha << _choices[i].second <<
+		(i + 1 == _choices.size() ? "" : "\n");
 	return os;
     }
 

@@ -61,9 +61,11 @@ namespace minji
     std::ostream& operator<<(std::ostream& os, const card& c)
     {
         return (os <<
-                "# Description\n" << c.description() << "\n"
-                "# Front\n" << c.front() << "\n"
-                "# Back\n" << c.back() << "\n");
+		"\n============================================\n" <<
+                "# description:\n" << c.description() << "\n"
+                "# front:\n" << c.front() << "\n"
+                "# back:\n" << c.back() <<
+		"\n============================================\n");
     }
 
     card::card(std::string description, std::string front,

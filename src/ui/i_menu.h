@@ -5,9 +5,14 @@
 #include <vector>
 #include <memory>
 
+#include "menu_opt.h"
+#include "practice_opt.h"
 #include "../minji/deck.h"
+#include "../minji/deck.h"
+#include "../minji/answer_type.h"
+#include "../minji/answer_factory.h"
 
-namespace minji
+namespace menu
 {
     constexpr static std::string_view invalid_input = "[Error] invalid input, try again\n";
     constexpr static std::string_view prompt = "  > ";
@@ -37,17 +42,6 @@ namespace minji
     {
 	return parse_input(t, default_validate);
     }
-
-    template<> inline bool parse_input<std::string>(std::string& t)
-    {
-	while (std::cout << prompt && (!getline(std::cin, t))) {
-	    if (std::cin.eof())
-		return false;
-	    std::cerr << invalid_input;
-	}
-	return true;
-    }
-
 }
 
 void i_menu(std::vector<std::shared_ptr<minji::deck>> decks = {});
