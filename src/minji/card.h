@@ -2,8 +2,9 @@
 
 #include <iostream>
 #include <memory>
+#include <sstream>
 
-#include "answer.h"
+#include "answers/answer.h"
 
 namespace minji
 {
@@ -26,16 +27,22 @@ namespace minji
             answer& back();
             const answer& back() const;
 
+	    enum class reveal_back : bool { no, yes };
+	    void show(std::ostream&, reveal_back) const;
+
             bool operator==(const card& c) const;
+	    friend std::ostream& operator<<(std::ostream&, const minji::card&);
             friend class card_builder;
 
         private:
             card(std::string description, std::string front,
                     std::unique_ptr<answer>&& ans, std::string cty) noexcept;
-            std::string _description;
-            std::string _front;
-            std::unique_ptr<answer> _back;
-            std::string _deck_name;
+            std::string description_;
+            std::string front_;
+            std::unique_ptr<answer> back_;
+            std::string deck_name_;
+
+	    std::string print_to_string(reveal_back) const;
     };
 
     std::ostream& operator<<(std::ostream&, const minji::card&);
@@ -52,9 +59,9 @@ namespace minji
 
         private:
             card_builder(std::string deck_name);
-	    std::string _deck_name;
-            std::string _description;
-            std::string _front;
-            std::unique_ptr<answer> _ans;
+	    std::string deck_name_;
+            std::string description_;
+            std::string front_;
+            std::unique_ptr<answer> ans_;
     };
 }

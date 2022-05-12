@@ -17,16 +17,18 @@ namespace minji
 	    void replace(std::vector<card>::iterator, card);
 	    std::string& name();
 	    const std::string& name() const;
-	    void show_card(std::ostream&, size_t) const;
+	    void show_card(std::ostream&, size_t, card::reveal_back) const;
+	    void show_answer(std::ostream&, size_t) const;
 	    size_t size() const;
 	    bool operator==(const deck& rhs) const;
-	    std::vector<card>::iterator begin() { return _cards.begin(); }
-	    std::vector<card>::iterator end() { return _cards.end() ;}
-	    std::vector<card>::const_iterator cbegin() const { return _cards.cbegin(); }
-	    std::vector<card>::const_iterator cend() const { return _cards.cend(); }
+	    std::vector<card>::iterator begin() { return cards_.begin(); }
+	    std::vector<card>::iterator end() { return cards_.end() ;}
+	    std::vector<card>::const_iterator cbegin() const { return cards_.cbegin(); }
+	    std::vector<card>::const_iterator cend() const { return cards_.cend(); }
 
 	private:
-	    std::string _name;
-	    std::vector<card> _cards;
+	    std::string name_;
+	    std::vector<card> cards_;
+
     };
 }

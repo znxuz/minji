@@ -4,17 +4,17 @@
 
 namespace minji
 {
-    deck::deck(std::string name) : _name(name)
+    deck::deck(std::string name) : name_(name)
     {}
 
     void deck::add(card c)
     {
-	_cards.push_back(std::move(c));
+	cards_.push_back(std::move(c));
     }
 
     void deck::remove(std::vector<card>::iterator it)
     {
-	_cards.erase(it);
+	cards_.erase(it);
     }
 
     void deck::replace(std::vector<card>::iterator it, card c)
@@ -24,7 +24,7 @@ namespace minji
 
     std::string& deck::name()
     {
-	return _name;
+	return name_;
     }
 
     const std::string& deck::name() const
@@ -32,18 +32,23 @@ namespace minji
 	return const_cast<deck*>(this)->name();
     }
 
-    void deck::show_card(std::ostream& os, size_t idx) const
+    void deck::show_card(std::ostream& os, size_t idx, card::reveal_back reveal) const
     {
-	os << _cards[idx];
+	cards_[idx].show(os, reveal);
+    }
+
+    void deck::show_answer(std::ostream& os, size_t idx) const
+    {
+	os << cards_[idx].back();
     }
 
     size_t deck::size() const
     {
-	return _cards.size();
+	return cards_.size();
     }
 
     bool deck::operator==(const deck& rhs) const
     {
-	return this->_name == rhs._name && this->_cards == rhs._cards;
+	return this->name_ == rhs.name_ && this->cards_ == rhs.cards_;
     }
 }

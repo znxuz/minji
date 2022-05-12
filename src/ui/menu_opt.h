@@ -1,7 +1,8 @@
 #pragma once
 
-#include <iostream>
+#include <algorithm>
 #include <array>
+#include <iostream>
 
 namespace menu
 {

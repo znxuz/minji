@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <string>
+#include <iostream>
 
 #include "answer.h"
 
@@ -14,7 +15,7 @@ namespace minji
 	    bool operator==(const multi_answer&) const;
 
 	private:
-	    std::vector<std::pair<std::string, bool>> _choices;
+	    std::vector<std::pair<std::string, bool>> choices_;
 
 	    std::ostream& output(std::ostream&) const override;
 	    multi_answer* clone_impl() const override;

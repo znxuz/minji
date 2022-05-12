@@ -1,29 +1,27 @@
 #include "multi_answer.h"
 
-#include <iostream>
-
 namespace minji
 {
     multi_answer::multi_answer(std::vector<std::pair<std::string, bool>> choices) :
-	_choices(choices)
+	choices_(choices)
     {}
 
     bool multi_answer::operator==(const multi_answer& ans) const
     {
-	return this->_choices == ans._choices;
+	return this->choices_ == ans.choices_;
     }
 
     std::ostream& multi_answer::output(std::ostream& os) const
     {
-	for (size_t i = 0; i < _choices.size(); ++i)
-	    os << "- " << _choices[i].first <<
-		"\n  -> " << std::boolalpha << _choices[i].second <<
-		(i + 1 == _choices.size() ? "" : "\n");
+	for (size_t i = 0; i < choices_.size(); ++i)
+	    os << "- " << choices_[i].first <<
+		"\n  -> " << std::boolalpha << choices_[i].second <<
+		(i + 1 == choices_.size() ? "" : "\n");
 	return os;
     }
 
     multi_answer* multi_answer::clone_impl() const
     {
-	return new multi_answer(_choices);
+	return new multi_answer(choices_);
     }
 }

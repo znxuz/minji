@@ -14,7 +14,7 @@ namespace minji
 	    bool operator==(const plain_answer&) const;
 
 	private:
-	    std::string _ans;
+	    std::string ans_;
 
 	    std::ostream& output(std::ostream&) const override;
 	    plain_answer* clone_impl() const override;

@@ -6,18 +6,19 @@
 #include <memory>
 
 #include "menu_opt.h"
-#include "practice_opt.h"
 #include "../minji/deck.h"
 #include "../minji/deck.h"
-#include "../minji/answer_type.h"
-#include "../minji/answer_factory.h"
+#include "../minji/answers/answer_type.h"
+#include "../minji/answers/answer_factory.h"
+#include "../practice/practice_opt.h"
+#include "../practice/practice.h"
 
 namespace menu
 {
     constexpr static std::string_view invalid_input = "[Error] invalid input, try again\n";
     constexpr static std::string_view prompt = "  > ";
 
-    inline auto default_validate = [](auto) { return false; };
+    inline const auto default_validate = [](auto) { return false; };
 
     inline void flush()
     {
@@ -25,7 +26,7 @@ namespace menu
 	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     }
 
-    template<typename T, typename V> bool parse_input(T& t, V& v)
+    template<typename T, typename V> bool parse_input(T& t, const V& v)
     {
 	while (std::cout << prompt && (!(std::cin >> t) || v(t))) {
 	    if (std::cin.eof())

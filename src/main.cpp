@@ -3,8 +3,8 @@
 
 #include "ui/i_menu.h"
 #include "minji/card.h"
-#include "minji/plain_answer.h"
-#include "minji/answer_factory.h"
+#include "minji/answers/answer_factory.h"
+#include "minji/answers/plain_answer.h"
 #include "minji/deck.h"
 #include "minji/card.h"
 

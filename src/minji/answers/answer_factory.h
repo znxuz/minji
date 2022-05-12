@@ -2,12 +2,14 @@
 
 #include <string>
 #include <vector>
-
+#include <memory>
 #include <iostream>
+
 #include "answer.h"
-#include "card.h"
-#include "plain_answer.h"
 #include "answer_type.h"
+#include "plain_answer.h"
+#include "multi_answer.h"
+
 
 namespace minji
 {

@@ -2,27 +2,27 @@
 
 namespace minji
 {
-    card::card(const card& c) : _description(c._description),
-    _front(c._front), _deck_name(c._deck_name)
+    card::card(const card& c) : description_(c.description_),
+    front_(c.front_), deck_name_(c.deck_name_)
     {
-	_back = c.back().clone();
+	back_ = c.back().clone();
     }
 
     card& card::operator=(const card& c)
     {
 	card cpy = c;
 	using std::swap;
-	swap(this->_description, cpy._description);
-	swap(this->_front, cpy._front);
-	swap(this->_back, cpy._back);
-	swap(this->_deck_name, cpy._deck_name);
+	swap(this->description_, cpy.description_);
+	swap(this->front_, cpy.front_);
+	swap(this->back_, cpy.back_);
+	swap(this->deck_name_, cpy.deck_name_);
 
 	return *this;
     }
 
     std::string& card::description()
     {
-        return _description;
+        return description_;
     }
 
     const std::string& card::description() const
@@ -32,7 +32,7 @@ namespace minji
 
     std::string& card::front()
     {
-        return _front;
+        return front_;
     }
 
     const std::string& card::front() const
@@ -42,7 +42,7 @@ namespace minji
 
     answer& card::back()
     {
-        return *_back;
+        return *back_;
     }
 
     const answer& card::back() const
@@ -50,61 +50,81 @@ namespace minji
         return const_cast<card*>(this)->back();
     }
 
+    void card::show(std::ostream& os, reveal_back reveal) const
+    {
+	os << this->print_to_string(reveal);
+    }
+
     bool card::operator==(const card& c) const
     {
         return this == &c ||
-            (this->_front == c._front &&
-             this->_back == c._back &&
-             this->_deck_name == c._deck_name);
+            (this->front_ == c.front_ &&
+             this->back_ == c.back_ &&
+             this->deck_name_ == c.deck_name_);
     }
 
     std::ostream& operator<<(std::ostream& os, const card& c)
     {
-        return (os <<
-		"\n============================================\n" <<
-                "# description:\n" << c.description() << "\n"
-                "# front:\n" << c.front() << "\n"
-                "# back:\n" << c.back() <<
-		"\n============================================\n");
+        return (os << c.print_to_string(card::reveal_back::yes));
     }
 
     card::card(std::string description, std::string front,
-            std::unique_ptr<answer>&& ans, std::string deck_name) noexcept :
-        _description(std::move(description)),
-        _front(std::move(front)),
-        _back(std::move(ans)),
-        _deck_name(std::move(deck_name))
-        {}
+	    std::unique_ptr<answer>&& ans, std::string deck_name) noexcept :
+	description_(std::move(description)),
+	front_(std::move(front)),
+	back_(std::move(ans)),
+	deck_name_(std::move(deck_name))
+    {}
 
-    card_builder::card_builder(std::string deck_name) : _deck_name(deck_name)
+    std::string card::print_to_string(reveal_back reveal) const
+    {
+	std::stringstream ss;
+	ss << "============================================\n"
+                "# description\n" << this->description() << "\n\n"
+                "# front\n" << this->front() << "\n\n";
+	ss << "# back\n";
+
+	if (reveal == reveal_back::yes)
+	    ss << this->back();
+	else
+	    ss << "***\n";
+
+	ss << "============================================\n";
+	return ss.str();
+    }
+}
+
+namespace minji
+{
+    card_builder::card_builder(std::string deck_name) : deck_name_(deck_name)
     {}
 
     card_builder card_builder::init(std::string deck_name)
     {
-        return card_builder(std::move(deck_name));
+	return card_builder(std::move(deck_name));
     }
 
     card_builder& card_builder::description(std::string description)
     {
-        _description = std::move(description);
-        return *this;
+	description_ = std::move(description);
+	return *this;
     }
 
     card_builder& card_builder::front(std::string front)
     {
-        _front = std::move(front);
-        return *this;
+	front_ = std::move(front);
+	return *this;
     }
 
     card_builder& card_builder::back(std::unique_ptr<answer>&& ans)
     {
-        _ans = std::move(ans);
-        return *this;
+	ans_ = std::move(ans);
+	return *this;
     }
 
     card card_builder::build()
     {
-        return card(std::move(_description), std::move(_front),
-                std::move(_ans), std::move(_deck_name));
+	return card(std::move(description_), std::move(front_),
+		std::move(ans_), std::move(deck_name_));
     }
 }

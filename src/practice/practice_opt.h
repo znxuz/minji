@@ -1,19 +1,20 @@
 #pragma once
 
+#include <algorithm>
 #include <iostream>
 #include <array>
 
-namespace menu
+namespace practice
 {
     enum class practice_opt
     {
-	numbered = 'n', time_limited = 't', unlimited = 'u', random = 'r'
+	numbered = 'n', unlimited = 'u', single_random = 's', exit = 'e'
+	     // , time_limited = 't'
     };
 
     static constexpr std::array<practice_opt, 4> practice_opts
     {
-	practice_opt::numbered, practice_opt::time_limited,
-	    practice_opt::unlimited, practice_opt::random
+	practice_opt::numbered, practice_opt::unlimited, practice_opt::single_random, practice_opt::exit
     };
 
     inline std::istream& operator>>(std::istream& is, practice_opt& opt)
@@ -34,12 +35,12 @@ namespace menu
 	switch (opt) {
 	    case practice_opt::numbered:
 		return (os << "(n)umbered");
-	    case practice_opt::time_limited:
-		return (os << "(t)ime limited");
 	    case practice_opt::unlimited:
 		return (os << "(u)nlimited");
-	    case practice_opt::random:
-		return (os << "(r)andom");
+	    case practice_opt::single_random:
+		return (os << "(s)ingle random");
+	    case practice_opt::exit:
+		return (os << "(e)xit");
 	}
     }
 
