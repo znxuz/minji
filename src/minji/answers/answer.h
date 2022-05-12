@@ -12,7 +12,7 @@ namespace minji
 	    {
 		return std::unique_ptr<answer>(this->clone_impl());
 	    }
-	    virtual ~answer() noexcept = default;
+	    virtual ~answer() = default;
 	    friend std::ostream& operator<<(std::ostream& os,
 		    const minji::answer& ans)
 	    {

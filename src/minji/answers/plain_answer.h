@@ -10,7 +10,7 @@ namespace minji
     class plain_answer : public answer
     {
 	public:
-	    plain_answer(std::string) noexcept;
+	    explicit plain_answer(std::string) noexcept;
 	    bool operator==(const plain_answer&) const;
 
 	private:

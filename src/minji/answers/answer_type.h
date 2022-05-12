@@ -34,6 +34,7 @@ namespace minji
 	    case answer_type::multiple_choice:
 		return (os << "multiple choice");
 	}
+	return os;
     }
 
 }

@@ -42,6 +42,7 @@ namespace practice
 	    case practice_opt::exit:
 		return (os << "(e)xit");
 	}
+	return os;
     }
 
 }

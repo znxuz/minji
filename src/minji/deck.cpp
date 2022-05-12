@@ -4,7 +4,7 @@
 
 namespace minji
 {
-    deck::deck(std::string name) : name_(name)
+    deck::deck(std::string name) : name_(std::move(name))
     {}
 
     void deck::add(card c)

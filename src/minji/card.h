@@ -58,7 +58,7 @@ namespace minji
             minji::card build();
 
         private:
-            card_builder(std::string deck_name);
+            explicit card_builder(std::string deck_name);
 	    std::string deck_name_;
             std::string description_;
             std::string front_;

@@ -3,7 +3,7 @@
 namespace minji
 {
     multi_answer::multi_answer(std::vector<std::pair<std::string, bool>> choices) :
-	choices_(choices)
+	choices_(std::move(choices))
     {}
 
     bool multi_answer::operator==(const multi_answer& ans) const

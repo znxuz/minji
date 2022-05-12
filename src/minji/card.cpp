@@ -3,10 +3,8 @@
 namespace minji
 {
     card::card(const card& c) : description_(c.description_),
-    front_(c.front_), deck_name_(c.deck_name_)
-    {
-	back_ = c.back().clone();
-    }
+    front_(c.front_), back_(c.back().clone()), deck_name_(c.deck_name_)
+    {}
 
     card& card::operator=(const card& c)
     {

@@ -11,7 +11,7 @@ namespace minji
     class multi_answer : public answer
     {
 	public:
-	    multi_answer(std::vector<std::pair<std::string, bool>> choices);
+	    explicit multi_answer(std::vector<std::pair<std::string, bool>> choices);
 	    bool operator==(const multi_answer&) const;
 
 	private:

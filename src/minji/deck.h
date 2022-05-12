@@ -11,7 +11,7 @@ namespace minji
     class deck
     {
 	public:
-	    deck(std::string);
+	    explicit deck(std::string);
 	    void add(card);
 	    void remove(std::vector<card>::iterator);
 	    void replace(std::vector<card>::iterator, card);
