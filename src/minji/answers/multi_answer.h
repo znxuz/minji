@@ -13,11 +13,11 @@ namespace minji
 	public:
 	    explicit multi_answer(std::vector<std::pair<std::string, bool>> choices);
 	    bool operator==(const multi_answer&) const;
+	    std::string output(reveal) const override;
 
 	private:
 	    std::vector<std::pair<std::string, bool>> choices_;
 
-	    std::ostream& output(std::ostream&) const override;
 	    multi_answer* clone_impl() const override;
     };
 }

@@ -2,7 +2,8 @@
 
 namespace minji
 {
-    multi_answer::multi_answer(std::vector<std::pair<std::string, bool>> choices) :
+    multi_answer::multi_answer(
+	    std::vector<std::pair<std::string, bool>> choices) :
 	choices_(std::move(choices))
     {}
 
@@ -11,13 +12,16 @@ namespace minji
 	return this->choices_ == ans.choices_;
     }
 
-    std::ostream& multi_answer::output(std::ostream& os) const
+    std::string multi_answer::output(reveal reveal) const
     {
+	std::string output;
 	for (size_t i = 0; i < choices_.size(); ++i)
-	    os << "- " << choices_[i].first <<
-		"\n  -> " << std::boolalpha << choices_[i].second <<
-		(i + 1 == choices_.size() ? "" : "\n");
-	return os;
+	    output += "- " + choices_[i].first + " [" + 
+		(reveal == reveal::yes ? (choices_[i].second ?
+					  "O" : "X") : "****")
+		+ "]\n";
+
+	return output;
     }
 
     multi_answer* multi_answer::clone_impl() const

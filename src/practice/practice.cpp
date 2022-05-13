@@ -2,28 +2,41 @@
 
 namespace
 {
-    static std::mt19937_64 gen;
+    static auto gen = std::mt19937(std::random_device()());
 }
 
 namespace practice
 {
-    void practice(const minji::deck* deck, int count)
+    void loop_through(std::deque<const minji::card*>& que, int count)
     {
 	if (!count || std::cin.eof())
 	    return;
 
 	std::system("clear");
 
-	size_t idx = gen() % deck->size();
-	deck->show_card(std::cout, idx, minji::card::reveal_back::no);
+	const auto* crd = que.front();
+	que.pop_front();
+	que.push_back(crd);
+	crd->show(std::cout, minji::answer::reveal::no);
 	std::cout << "[confirm] press any key to show the answer";
-	if (std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n')) {
-	    deck->show_answer(std::cout, idx);
-	    std::cout << '\n';
-	    std::cout << "[confirm] press any key to continue...";
+	if (std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n')
+		&& !std::cin.eof()) {
+	    std::cout << crd->back() << '\n';
+	    std::cout << "[confirm] press any key to continue";
 	    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 	}
 
-	practice(deck, --count);
+	loop_through(que, --count);
+    }
+
+    void practice(const minji::deck* deck, int count)
+    {
+	std::deque<const minji::card*> que(deck->size());
+	size_t i = 0;
+	for (const auto& c : *deck)
+	    que[i++] = &c;
+
+	std::shuffle(begin(que), end(que), gen);
+	loop_through(que, count);
     }
 }

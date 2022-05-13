@@ -32,7 +32,7 @@ namespace minji
 	return const_cast<deck*>(this)->name();
     }
 
-    void deck::show_card(std::ostream& os, size_t idx, card::reveal_back reveal) const
+    void deck::show_card(std::ostream& os, size_t idx, answer::reveal reveal) const
     {
 	cards_[idx].show(os, reveal);
     }

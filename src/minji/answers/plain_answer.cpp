@@ -10,9 +10,9 @@ namespace minji
 	return this == &pa || this->ans_ == pa.ans_;
     }
 
-    std::ostream& plain_answer::output(std::ostream& os) const
+    std::string plain_answer::output(reveal reveal) const
     {
-	return (os << this->ans_);
+	return (reveal == reveal::yes ? this->ans_ : "****");
     }
 
     plain_answer* plain_answer::clone_impl() const

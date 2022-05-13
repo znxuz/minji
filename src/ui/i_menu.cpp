@@ -19,7 +19,8 @@ namespace
 	using practice::practice_opt;
 	using practice::practice_opts;
 
-	std::cout << "[menu] practice <" << current_deck.lock()->name() << "> \n";
+	std::cout << "[menu] practice <" << current_deck.lock()->name()
+	    << "> \n";
 	for (size_t i = 0; i < practice_opts.size(); ++i)
 	    std::cout << "  - " << practice_opts[i] << '\n';
 
@@ -31,8 +32,10 @@ namespace
 	int count;
 	switch (opt) {
 	    case practice::practice_opt::numbered: {
-		std::cout << "[input] number of cards to practice: (enter 0 to cancel)\n";
-		if (!parse_input(count, [](int count) { return count < 0; }) || !count)
+		std::cout << "[input] number of cards to practice:"
+		    "(enter 0 to cancel)\n";
+		if (!parse_input(count, [](int count) { return count < 0; }) ||
+			!count)
 		    return;
 		break;
 	    }
@@ -72,13 +75,13 @@ namespace
     {
 	std::cout << "[input] short description of the card:\n";
 	std::string description;
-	if (std::cout << menu::prompt && !std::getline(std::cin, description))
+	if (std::cout << menu::prompt && !parse_input(description))
 	    return;
 	opt_descr = std::move(description);
 
 	std::cout << "[input] card front:\n";
 	std::string front;
-	if (std::cout << menu::prompt && !std::getline(std::cin, front))
+	if (std::cout << menu::prompt && !parse_input(front))
 	    return;
 	opt_front = std::move(front);
 
@@ -101,7 +104,8 @@ namespace
 		    return s.size() > 1 || (s != "y" && s != "n" && s != "c");
 		};
 		do {
-		    std::cout << "[input] total number of choices: (enter 0 to cancel)\n";
+		    std::cout << "[input] total number of choices:"
+			"(enter 0 to cancel)\n";
 		    if (!parse_input(ans_count) || !ans_count)
 			return;
 		    std::cout << "[confirm] total choices: " << ans_count <<
@@ -112,17 +116,19 @@ namespace
 
 		std::vector<std::pair<std::string, bool>> choices(ans_count);
 		for (unsigned i = 0; i < ans_count; ++i) {
-		    std::cout << "[input] enter answer " << (i + 1) << ".\n" << menu::prompt;
+		    std::cout << "[input] enter answer " << (i + 1) << ".\n";
 		    std::string ans;
-		    if (!std::getline(std::cin, ans))
+		    if (!parse_input(ans))
 			return;
-		    std::cout << "[confirm] is this answer the correct one? [(y)es/(n)o/(c)ancel]\n";
+		    std::cout << "[confirm] is this answer the correct one?"
+			"[(y)es/(n)o/(c)ancel]\n";
 		    std::string confirm;
 		    if (!parse_input(confirm, invalid_in) || confirm == "c")
 			return;
 		    choices[i] = std::pair(std::move(ans), (confirm == "y"));
-		    std::cout << "[message] added the following answer: " << choices[i].first <<
-			" -> " << std::boolalpha << choices[i].second << "\n";
+		    std::cout << "[message] added the following answer: " <<
+			choices[i].first << " -> " << std::boolalpha <<
+			choices[i].second << "\n";
 		}
 		opt_back = minji::make_answer(std::move(choices));
 	    }
@@ -150,7 +156,8 @@ namespace
 	if (!c)
 	    return;
 	current_deck.lock()->add(*c);
-	std::cout << "[message] added card to deck <" << current_deck.lock()->name() << ">\n";
+	std::cout << "[message] added card to deck <" <<
+	    current_deck.lock()->name() << ">\n";
     }
 
     void list_card()
@@ -162,14 +169,21 @@ namespace
 
     void list_card_menu()
     {
-	auto invalid_in = [size = current_deck.lock()->size()](size_t idx) { return idx > size; };
+	auto invalid_in = [size = current_deck.lock()->size()](size_t idx) {
+	    return idx > size;
+	};
 	size_t idx = 0;
 	do {
-	    if (idx)
-		current_deck.lock()->show_card(std::cout, idx - 1, minji::card::reveal_back::yes), std::cout << '\n';
+	    if (idx) {
+		std::system("clear");
+		current_deck.lock()->show_card(std::cout, idx - 1,
+			minji::answer::reveal::yes);
+		std::cout << '\n';
+	    }
 	    std::cout << "[list] cards:\n";
 	    list_card();
-	    std::cout << "[input] card index for content: (enter 0 to cancel)\n";
+	    std::cout << "[input] card index for content:"
+		"(enter 0 to cancel)\n";
 	} while (menu::parse_input(idx, invalid_in) && idx != 0);
     }
 
@@ -178,7 +192,9 @@ namespace
 	std::cout << "[select] card to replace: (enter 0 to cancel)\n";
 	list_card();
 	unsigned idx;
-	auto invalid_in = [limit = current_deck.lock()->size()](size_t idx) { return idx > limit; };
+	auto invalid_in = [limit = current_deck.lock()->size()](size_t idx) {
+	    return idx > limit;
+	};
 	if (!parse_input(idx, invalid_in) || !idx--)
 	    return;
 
@@ -193,7 +209,9 @@ namespace
 	std::cout << "[selection] card to remove: (enter 0 to cancel)\n";
 	list_card();
 	unsigned idx;
-	auto invalid_in = [size = current_deck.lock()->size()](size_t idx) { return idx > size; };
+	auto invalid_in = [size = current_deck.lock()->size()](size_t idx) {
+	    return idx > size;
+	};
 	if (!parse_input(idx, invalid_in) || !idx--)
 	    return;
 	current_deck.lock()->remove(current_deck.lock()->begin() + idx);
@@ -212,7 +230,8 @@ namespace
 
 	do {
 	    if (!name.empty())
-		std::cerr << "[error] deck with the same name exists, try again\n";
+		std::cerr << "[error] deck with the same name exists,"
+		    "try again\n";
 	    if (!parse_input(name))
 		return;
 	} while (same_name(name));
@@ -234,7 +253,9 @@ namespace
 	list_deck(deck);
 	std::cout << "  (" << (deck.size() + 1) << ") make a new deck\n";
 
-	auto invalid_in = [limit = deck.size() + 1](size_t in) { return in > limit; };
+	auto invalid_in = [limit = deck.size() + 1](size_t in) {
+	    return in > limit;
+	};
 	size_t idx;
 	if (!parse_input(idx, invalid_in) || !idx--)
 	    return;
@@ -256,7 +277,9 @@ namespace
 	std::cout << "  (" << (deck.size() + 1) << ") remove all\n";
 
 	unsigned idx;
-	auto invalid_in = [size = deck.size()](unsigned idx) { return --idx > size; };
+	auto invalid_in = [size = deck.size()](unsigned idx) {
+	    return --idx > size;
+	};
 	if (!parse_input(idx, invalid_in))
 	    return;
 	--idx;
@@ -290,7 +313,8 @@ namespace
 	return opt;
     }
 
-    void exec_opt(menu::opt opt, std::vector<std::shared_ptr<minji::deck>>& decks)
+    void exec_opt(menu::opt opt,
+	    std::vector<std::shared_ptr<minji::deck>>& decks)
     {
 	std::system("clear");
 	switch (opt) {

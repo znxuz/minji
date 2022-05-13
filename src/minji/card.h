@@ -27,8 +27,7 @@ namespace minji
             answer& back();
             const answer& back() const;
 
-	    enum class reveal_back : bool { no, yes };
-	    void show(std::ostream&, reveal_back) const;
+	    void show(std::ostream&, answer::reveal) const;
 
             bool operator==(const card& c) const;
 	    friend std::ostream& operator<<(std::ostream&, const minji::card&);
@@ -42,7 +41,7 @@ namespace minji
             std::unique_ptr<answer> back_;
             std::string deck_name_;
 
-	    std::string print_to_string(reveal_back) const;
+	    std::string to_string(answer::reveal) const;
     };
 
     std::ostream& operator<<(std::ostream&, const minji::card&);

@@ -12,11 +12,11 @@ namespace minji
 	public:
 	    explicit plain_answer(std::string) noexcept;
 	    bool operator==(const plain_answer&) const;
+	    std::string output(reveal) const override;
 
 	private:
 	    std::string ans_;
 
-	    std::ostream& output(std::ostream&) const override;
 	    plain_answer* clone_impl() const override;
     };
 }

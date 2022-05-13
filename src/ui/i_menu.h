@@ -28,11 +28,13 @@ namespace menu
 
     template<typename T, typename V> bool parse_input(T& t, const V& v)
     {
-	while (std::cout << prompt && (!(std::cin >> t) || v(t))) {
+	std::cout << prompt;
+	while ((!(std::cin >> t) || v(t))) {
 	    if (std::cin.eof())
 		return false;
 	    std::cerr << invalid_input;
 	    flush();
+	    std::cout << prompt;
 	}
 	flush();
 

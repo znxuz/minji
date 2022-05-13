@@ -48,9 +48,9 @@ namespace minji
         return const_cast<card*>(this)->back();
     }
 
-    void card::show(std::ostream& os, reveal_back reveal) const
+    void card::show(std::ostream& os, answer::reveal reveal) const
     {
-	os << this->print_to_string(reveal);
+	os << this->to_string(reveal);
     }
 
     bool card::operator==(const card& c) const
@@ -63,7 +63,7 @@ namespace minji
 
     std::ostream& operator<<(std::ostream& os, const card& c)
     {
-        return (os << c.print_to_string(card::reveal_back::yes));
+        return (os << c.to_string(answer::reveal::yes));
     }
 
     card::card(std::string description, std::string front,
@@ -74,20 +74,13 @@ namespace minji
 	deck_name_(std::move(deck_name))
     {}
 
-    std::string card::print_to_string(reveal_back reveal) const
+    std::string card::to_string(answer::reveal reveal) const
     {
 	std::stringstream ss;
-	ss << "============================================\n"
-                "# description\n" << this->description() << "\n\n"
-                "# front\n" << this->front() << "\n\n";
-	ss << "# back\n";
+	ss << "# description\n" << this->description() << "\n\n"
+                "# front\n" << this->front() << "\n\n" <<
+		"# back\n" << this->back().output(reveal) << '\n';
 
-	if (reveal == reveal_back::yes)
-	    ss << this->back();
-	else
-	    ss << "***\n";
-
-	ss << "============================================\n";
 	return ss.str();
     }
 }
