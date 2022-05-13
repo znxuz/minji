@@ -1,12 +1,12 @@
 #include <iostream>
 #include <memory>
 
-#include "ui/i_menu.h"
-#include "minji/card.h"
-#include "minji/answers/answer_factory.h"
-#include "minji/answers/plain_answer.h"
-#include "minji/deck.h"
-#include "minji/card.h"
+#include "minji/ui/i_menu.h"
+#include "minji/core/card.h"
+#include "minji/core/answers/answer_factory.h"
+#include "minji/core/answers/plain_answer.h"
+#include "minji/core/deck.h"
+#include "minji/core/card.h"
 
 std::vector<std::shared_ptr<minji::deck>> get_decks()
 {

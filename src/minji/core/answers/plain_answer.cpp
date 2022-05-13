@@ -12,7 +12,7 @@ namespace minji
 
     std::string plain_answer::output(reveal reveal) const
     {
-	return (reveal == reveal::yes ? this->ans_ : "****");
+	return (reveal == reveal::yes ? this->ans_ : "_");
     }
 
     plain_answer* plain_answer::clone_impl() const

@@ -21,7 +21,8 @@ namespace practice
 	std::cout << "[confirm] press any key to show the answer";
 	if (std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n')
 		&& !std::cin.eof()) {
-	    std::cout << crd->back() << '\n';
+	    std::system("clear");
+	    crd->show(std::cout, minji::answer::reveal::yes);
 	    std::cout << "[confirm] press any key to continue";
 	    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 	}

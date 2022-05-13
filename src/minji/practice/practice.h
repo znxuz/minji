@@ -5,8 +5,8 @@
 #include <random>
 
 #include "practice_opt.h"
-#include "../minji/deck.h"
-#include "../minji/card.h"
+#include "../core/deck.h"
+#include "../core/card.h"
 
 namespace practice
 {

@@ -16,10 +16,11 @@ namespace minji
     {
 	std::string output;
 	for (size_t i = 0; i < choices_.size(); ++i)
-	    output += "- " + choices_[i].first + " [" + 
+	    output += std::string("- [") +
 		(reveal == reveal::yes ? (choices_[i].second ?
-					  "O" : "X") : "****")
-		+ "]\n";
+					  "O" : "X") : "*") + "] " +
+		choices_[i].first +
+		(i + i == choices_.size() ? "" : "\n");
 
 	return output;
     }

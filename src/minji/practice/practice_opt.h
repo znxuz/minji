@@ -14,7 +14,8 @@ namespace practice
 
     static constexpr std::array<practice_opt, 4> practice_opts
     {
-	practice_opt::numbered, practice_opt::unlimited, practice_opt::single_random, practice_opt::exit
+	practice_opt::numbered, practice_opt::unlimited,
+	    practice_opt::single_random, practice_opt::exit
     };
 
     inline std::istream& operator>>(std::istream& is, practice_opt& opt)
