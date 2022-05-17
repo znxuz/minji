@@ -15,12 +15,14 @@ namespace minji
 	    void add(card);
 	    void remove(std::vector<card>::iterator);
 	    void replace(std::vector<card>::iterator, card);
-	    std::string& name();
 	    const std::string& name() const;
+	    std::string& name();
 	    void show_card(std::ostream&, size_t, answer::reveal) const;
 	    void show_answer(std::ostream&, size_t) const;
 	    size_t size() const;
 	    bool operator==(const deck& rhs) const;
+	    const card& operator[](size_t i) const;
+	    card& operator[](size_t i);
 
 	    std::vector<card>::iterator begin() { return cards_.begin(); }
 	    std::vector<card>::const_iterator begin() const { return cards_.begin(); }

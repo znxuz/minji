@@ -1,5 +1,5 @@
 *.o
-*.out
+mj
 *.a
 compile_flags.txt
 Session.vim

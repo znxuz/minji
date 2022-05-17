@@ -7,6 +7,7 @@
 #include "practice_opt.h"
 #include "../core/deck.h"
 #include "../core/card.h"
+#include "../utils/utils.h"
 
 namespace practice
 {

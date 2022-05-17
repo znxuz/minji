@@ -4,18 +4,20 @@
 #include <array>
 #include <iostream>
 
-namespace menu
+namespace ui
 {
     enum class opt
     {
-	practice = 'p', add_card = 'a', remove_card = 'r', change_card = 'c', list_card = 'l',
-	add_deck = 'A', remove_deck = 'R', change_deck = 'C', list_deck = 'L', exit = 'e'
+	practice = 'p', add_card = 'a', remove_card = 'r', change_card = 'c',
+	list_card = 'l', add_deck = 'A', remove_deck = 'R', change_deck = 'C',
+	list_deck = 'L', exit = 'e'
     };
 
     static constexpr std::array<opt, 10> opts
     {
-	opt::practice, opt::add_card, opt::remove_card, opt::change_card, opt::list_card,
-	    opt::add_deck, opt::remove_deck, opt::change_deck, opt::list_deck, opt::exit
+	opt::practice, opt::add_card, opt::remove_card, opt::change_card,
+	    opt::list_card, opt::add_deck, opt::remove_deck, opt::change_deck,
+	    opt::list_deck, opt::exit
     };
 
     inline std::istream& operator>>(std::istream& is, opt& opt)
@@ -23,7 +25,7 @@ namespace menu
 	char in;
 	is >> in;
 
-	opt = static_cast<menu::opt>(in);
+	opt = static_cast<ui::opt>(in);
 	if (std::find(begin(opts), end(opts), opt) == opts.end())
 	    is.setstate(std::ios::failbit);
 

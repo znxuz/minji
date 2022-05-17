@@ -1,6 +1,5 @@
 SRC_DIR := src
-BIN_DIR := bin
-NAME := $(BIN_DIR)/a.out
+NAME := mj
 
 CC := clang++
 LANG := c++
@@ -9,22 +8,23 @@ WARNINGS := -Wall -Wextra -Wpedantic -Weffc++ -Wconversion -Wshadow -Wnon-virtua
 			-Wcast-align -Woverloaded-virtual -Wnull-dereference \
 			-Wno-unused-parameter -Wno-unused-function -Wno-unused-variable
 SAN := -fsanitize=address,undefined
-DEBUG := -DDEBUG=1 -O0
 CFLAGS := -x $(LANG) -std=$(STD) $(WARNINGS) $(DEBUG)
 
 src := $(shell find $(SRC_DIR) -type f -name "*.cpp")
 obj := $(src:.cpp=.o)
 
-all: run
+all: compile
 
-run: generate_cc $(NAME)
-	./$(NAME) $(ARGS)
+compile: generate_cc $(NAME)
 
-re: fclean run
+run: compile
+	./$(NAME)
+
+re: fclean compile
 
 debug: CFLAGS += -g
 
-debug: fclean run
+debug: fclean compile
 
 $(NAME): $(obj)
 	$(CC) $(obj) $(SAN) -o $(NAME)
@@ -41,6 +41,3 @@ fclean: clean
 
 generate_cc:
 	@echo $(CFLAGS) | sed 's/\s/\n/g' > compile_flags.txt
-
-leak: $(NAME)
-	valgrind --leak-check=full $(NAME)

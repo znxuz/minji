@@ -51,4 +51,14 @@ namespace minji
     {
 	return this->name_ == rhs.name_ && this->cards_ == rhs.cards_;
     }
+
+    const card& deck::operator[](size_t i) const
+    {
+	return this->cards_[i];
+    }
+
+    card& deck::operator[](size_t i)
+    {
+	return const_cast<deck*>(this)->cards_[i];
+    }
 }
