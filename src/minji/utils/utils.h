@@ -45,14 +45,18 @@ namespace utils
     {
 	std::cout << prompt;
 	std::string line;
+	T buf;
 	while (std::getline(std::cin, line) && !line.empty()) {
 	    std::stringstream ss(line);
-	    if ((ss >> t) && !v(t))
+	    if ((ss >> buf) && !v(buf))
 		break;
+	    // FIXME t garbage value
 	    std::cerr << invalid_input;
 	    std::cout << prompt;
 	}
 
+	if (!line.empty())
+	    t = std::move(buf);
 	return !std::cin.eof();
     }
 

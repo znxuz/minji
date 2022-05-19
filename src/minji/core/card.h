@@ -8,9 +8,6 @@
 
 namespace minji
 {
-    class deck;
-    class card_builder;
-
     class card final
     {
         public:
@@ -26,16 +23,16 @@ namespace minji
             const std::string& front() const;
             answer& back();
             const answer& back() const;
-
 	    void show(std::ostream&, answer::reveal) const;
-
             bool operator==(const card& c) const;
+
 	    friend std::ostream& operator<<(std::ostream&, const minji::card&);
             friend class card_builder;
 
         private:
             card(std::string description, std::string front,
-                    std::unique_ptr<answer>&& ans, std::string cty) noexcept;
+                    std::unique_ptr<answer>&& ans,
+		    std::string deck_name) noexcept;
             std::string description_;
             std::string front_;
             std::unique_ptr<answer> back_;

@@ -77,9 +77,9 @@ namespace minji
     std::string card::to_string(answer::reveal reveal) const
     {
 	std::stringstream ss;
-	ss << "# description\n" << this->description() << "\n\n"
-                "# front\n" << this->front() << "\n\n" <<
-		"# back\n" << this->back().output(reveal) << '\n';
+	ss << "# " << this->description() << "\n\n"
+                "> " << this->front() << "\n\n" <<
+		this->back().output(reveal) << '\n';
 
 	return ss.str();
     }

@@ -8,10 +8,12 @@
 #include "minji/core/answers/plain_answer.h"
 #include "minji/core/deck.h"
 #include "minji/core/card.h"
+#include "minji/io/parse_markdown.h"
+#include "minji/io/export_markdown.h"
 
 namespace
 {
-    std::vector<std::shared_ptr<minji::deck>> get_decks()
+    std::shared_ptr<minji::deck> get_deck()
     {
 	auto d1 = std::make_shared<minji::deck>("deck1");
 	d1->add(minji::card_builder::init(d1->name())
@@ -35,15 +37,22 @@ namespace
 		.back(minji::make_answer({{"ans1", true}, {"ans2", false}}))
 		.build());
 
-	return {std::move(d1)};
+	return d1;
     }
 
 }
 
+void test()
+{
+    io::export_markdown(::get_deck(), "new.md");
+}
+
 int main(int argc, char** argv)
 {
+    test();
+    return 0;
     if (argc == 1)
-	ui::i_menu(get_decks());
+	ui::i_menu({get_deck()});
     else
 	ui::parse_argv(argc - 1, argv + 1);
 }
