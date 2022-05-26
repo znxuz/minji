@@ -10,6 +10,5 @@
 
 namespace io
 {
-    void export_markdown(const std::weak_ptr<minji::deck> deck,
-	    const std::string_view fname);
+    void export_markdown(const minji::deck* deck);
 }

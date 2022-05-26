@@ -18,9 +18,9 @@ namespace minji
 	for (size_t i = 0; i < choices_.size(); ++i)
 	    output += std::string("- [") +
 		(reveal == reveal::yes ? (choices_[i].second ?
-					  "O" : "X") : "*") + "] " +
-		choices_[i].first +
-		(i + i == choices_.size() ? "" : "\n");
+					  "O" : "X") : "*") +
+		"] " + choices_[i].first +
+		(i + 1 == choices_.size() ? "" : "\n");
 
 	return output;
     }

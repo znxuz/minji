@@ -8,24 +8,27 @@ namespace ui
 {
     enum class opt
     {
-	practice = 'p', add_card = 'a', remove_card = 'r', change_card = 'c',
-	list_card = 'l', add_deck = 'A', remove_deck = 'R', change_deck = 'C',
-	list_deck = 'L', exit = 'e'
+	practice = 'p',
+	add_card = 'a', remove_card = 'r', change_card = 'c', list_card = 'l',
+	add_deck = 'A', remove_deck = 'R', change_deck = 'C', list_deck = 'L',
+	import_deck = 'I', export_deck = 'E',
+	exit = 'e'
     };
 
-    static constexpr std::array<opt, 10> opts
+    static constexpr std::array<opt, 12> opts
     {
-	opt::practice, opt::add_card, opt::remove_card, opt::change_card,
-	    opt::list_card, opt::add_deck, opt::remove_deck, opt::change_deck,
-	    opt::list_deck, opt::exit
+	opt::practice,
+	    opt::add_card, opt::remove_card, opt::change_card, opt::list_card,
+	    opt::add_deck, opt::remove_deck, opt::change_deck, opt::list_deck,
+	    opt::import_deck, opt::export_deck, opt::exit
     };
 
     inline std::istream& operator>>(std::istream& is, opt& opt)
     {
 	char in;
 	is >> in;
-
 	opt = static_cast<ui::opt>(in);
+	// possible UB?
 	if (std::find(begin(opts), end(opts), opt) == opts.end())
 	    is.setstate(std::ios::failbit);
 
@@ -53,6 +56,10 @@ namespace ui
 		return (os << "(C)hange deck");
 	    case opt::list_deck:
 		return (os << "(L)ist deck");
+	    case opt::import_deck:
+		return (os << "(I)mport deck");
+	    case opt::export_deck:
+		return (os << "(E)xport deck");
 	    case opt::exit:
 		return (os << "(e)xit");
 	}

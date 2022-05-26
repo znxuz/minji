@@ -20,10 +20,10 @@ namespace utils
 	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     }
 
-    template<typename T, typename V> bool parse_input(T& t, const V& v)
+    template<typename T, typename V> bool parse_input(T& t, const V& invalid)
     {
 	std::cout << prompt;
-	while (!(std::cin >> t) || v(t)) {
+	while (!(std::cin >> t) || invalid(t)) {
 	    if (std::cin.eof())
 		return false;
 	    std::cerr << invalid_input;
@@ -40,29 +40,26 @@ namespace utils
 	return parse_input(t, non_validation);
     }
 
-    template<typename T, typename V> bool parse_input_allow_empty(T& t,
-	    const V& v)
+    template<typename T, typename V> bool parse_input_return_empty(T& t,
+	    const V& invalid)
     {
-	std::cout << prompt;
-	std::string line;
+	std::string in;
 	T buf;
-	while (std::getline(std::cin, line) && !line.empty()) {
-	    std::stringstream ss(line);
-	    if ((ss >> buf) && !v(buf))
-		break;
-	    // FIXME t garbage value
+	std::cout << prompt;
+	while (std::getline(std::cin, in) && !in.empty() &&
+		(!(std::stringstream(in) >> buf) || invalid(buf))) {
 	    std::cerr << invalid_input;
 	    std::cout << prompt;
 	}
-
-	if (!line.empty())
+	if (!in.empty())
 	    t = std::move(buf);
-	return !std::cin.eof();
+
+	return !std::cin.eof() && !in.empty();
     }
 
-    template <typename T> inline bool parse_input_allow_empty(T& t)
+    template <typename T> inline bool parse_input_return_empty(T& t)
     {
-	return parse_input_allow_empty(t, non_validation);
+	return parse_input_return_empty(t, non_validation);
     }
 
     inline void clear_screen()

@@ -40,19 +40,16 @@ namespace
 	return d1;
     }
 
-}
-
-void test()
-{
-    io::export_markdown(::get_deck(), "new.md");
+    std::shared_ptr<minji::deck> parse_example_deck()
+    {
+	return io::parse_markdown("tmp/test.md", "fat_deck");
+    }
 }
 
 int main(int argc, char** argv)
 {
-    test();
-    return 0;
     if (argc == 1)
-	ui::i_menu({get_deck()});
+	ui::i_menu({get_deck(), parse_example_deck()});
     else
 	ui::parse_argv(argc - 1, argv + 1);
 }

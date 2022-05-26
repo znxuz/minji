@@ -122,16 +122,13 @@ namespace
 
 namespace io
 {
-    std::shared_ptr<minji::deck> parse_markdown(const std::string_view fname,
+    std::shared_ptr<minji::deck> parse_markdown(const std::filesystem::path& p,
 	    const std::string& deck_name)
     {
-	std::ifstream ifs(fname.data());
-	if (!ifs)
-	    return {};
-
 	auto deck = std::make_shared<minji::deck>(deck_name);
-	card_component_mark mark = card_component_mark();
 	auto crd_builder = minji::card_builder::init(deck_name);
+	card_component_mark mark = card_component_mark();
+	std::ifstream ifs(p);
 	while (!ifs.eof() || mark.all_checked()) {
 	    if (mark.all_checked()) {
 		deck->add(crd_builder.build());

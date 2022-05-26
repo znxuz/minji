@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include <memory>
+#include <cstdlib>
 
 #include "menu_opt.h"
 #include "../core/deck.h"
@@ -13,6 +14,8 @@
 #include "../practice/practice_opt.h"
 #include "../practice/practice.h"
 #include "../utils/utils.h"
+#include "../io/export_markdown.h"
+#include "../io/parse_markdown.h"
 
 namespace ui
 {

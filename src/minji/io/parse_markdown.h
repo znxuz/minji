@@ -5,6 +5,7 @@
 #include <memory>
 #include <string>
 #include <regex>
+#include <filesystem>
 
 #include "../core/deck.h"
 #include "../core/card.h"
@@ -15,6 +16,6 @@
 
 namespace io
 {
-    std::shared_ptr<minji::deck> parse_markdown(const std::string_view fname,
+    std::shared_ptr<minji::deck> parse_markdown(const std::filesystem::path& p,
 	    const std::string& deck_name);
 }

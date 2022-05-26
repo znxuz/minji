@@ -66,7 +66,7 @@ namespace
 
 	    print_choices();
 	    choice c = choice::next;
-	    if (utils::parse_input_allow_empty(c)) {
+	    if (utils::parse_input_return_empty(c)) {
 		switch (c) {
 		    case choice::next:
 			randomized_deck.pop_front();
