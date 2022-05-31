@@ -14,10 +14,9 @@ namespace utils
 
     inline const auto non_validation = [](auto) { return false; };
 
-    inline void flush()
+    inline auto& flush()
     {
-	std::cin.clear();
-	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+	return std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     }
 
     template<typename T, typename V> bool parse_input(T& t, const V& invalid)
@@ -27,6 +26,7 @@ namespace utils
 	    if (std::cin.eof())
 		return false;
 	    std::cerr << invalid_input;
+	    std::cin.clear();
 	    flush();
 	    std::cout << prompt;
 	}
@@ -66,4 +66,11 @@ namespace utils
     {
 	std::system("clear");
     }
+
+    inline void prompt_enter()
+    {
+	std::cout << "press Enter to continue...\n";
+	utils::flush();
+    }
+
 }

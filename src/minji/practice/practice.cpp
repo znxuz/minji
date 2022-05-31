@@ -58,15 +58,17 @@ namespace
 	std::cout << "\n---\n\n";
 
 	std::cout << "[confirm] press Enter to show the answer";
-	if (std::cin.ignore(std::numeric_limits<std::streamsize>::max(),
-		    '\n') && !std::cin.eof()) {
+	if (utils::flush() && !std::cin.eof()) {
 	    clear_screen();
 	    crd->show(std::cout, minji::answer::reveal::yes);
 	    std::cout << "\n---\n\n";
 
 	    print_choices();
 	    choice c = choice::next;
-	    if (utils::parse_input_return_empty(c)) {
+	    if (!utils::parse_input_return_empty(c)) {
+		randomized_deck.pop_front();
+		randomized_deck.push_back(crd);
+	    } else {
 		switch (c) {
 		    case choice::next:
 			randomized_deck.pop_front();

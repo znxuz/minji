@@ -228,7 +228,7 @@ namespace
 	std::cout << "[message] card removed\n";
     }
 
-    void import_markdown(std::vector<std::shared_ptr<minji::deck>>& decks)
+    void import_markdown(minji::collection& clt)
     {
 	std::filesystem::path p;
 	do {
@@ -251,17 +251,19 @@ namespace
 	}
 
 	std::cout << "[message] added " + deck->name() + " into the decks\n";
-	decks.push_back(std::move(deck));
+	clt.add_deck(std::move(deck));
     }
 
-    void add_deck(std::vector<std::shared_ptr<minji::deck>>& deck)
+    void add_deck(minji::collection& clt)
     {
+	using std::begin, std::end;
+
 	std::cout << "[input] enter a name: \n";
 	std::string name;
-	auto same_name = [&deck](const std::string& name) {
-	    return std::find_if(begin(deck), end(deck),
+	auto same_name = [&clt](const std::string& name) {
+	    return std::find_if(begin(clt), end(clt),
 		    [&name](const auto& deck) { return deck->name() == name; })
-		!= deck.end();
+		!= clt.end();
 	};
 
 	do {
@@ -272,66 +274,66 @@ namespace
 		return;
 	} while (same_name(name));
 
-	deck.emplace_back(std::make_shared<minji::deck>(std::move(name)));
+	clt.add_deck(std::make_shared<minji::deck>(std::move(name)));
     }
 
-    void list_deck(const std::vector<std::shared_ptr<minji::deck>>& deck)
+    void list_deck(const minji::collection& clt)
     {
-	for (size_t i = 0; i < deck.size(); ++i) {
-	    std::cout << "  (" << (i + 1) << ") " << deck[i]->name() <<
-		(current_deck.lock() == deck[i] ? " (current)\n" : "\n");
+	for (size_t i = 0; i < clt.size(); ++i) {
+	    std::cout << "  (" << (i + 1) << ") " << clt[i]->name() <<
+		(current_deck.lock() == clt[i] ? " (current)\n" : "\n");
 	}
     }
 
-    void change_deck(std::vector<std::shared_ptr<minji::deck>>& decks)
+    void change_deck(minji::collection& clt)
     {
 	std::cout << "[selection] deck: (enter 0 or nothing to cancel)\n";
-	list_deck(decks);
-	std::cout << "  (" << (decks.size() + 1) << ") make a new deck\n";
-	std::cout << "  (" << (decks.size() + 2) << ") import a deck\n";
+	list_deck(clt);
+	std::cout << "  (" << (clt.size() + 1) << ") make a new deck\n";
+	std::cout << "  (" << (clt.size() + 2) << ") import a deck\n";
 
-	auto invalid_in = [limit = decks.size() + 2](size_t in) {
+	auto invalid_in = [limit = clt.size() + 2](size_t in) {
 	    return in > limit;
 	};
 	size_t idx;
 	if (!utils::parse_input_return_empty(idx, invalid_in) || !idx--)
 	    return;
 
-	if (idx < decks.size()) {
-	    current_deck = decks[idx];
+	if (idx < clt.size()) {
+	    current_deck = clt[idx];
 	    return;
 	}
 
-	if (idx == decks.size())
-	    add_deck(decks);
+	if (idx == clt.size())
+	    add_deck(clt);
 	else
-	    import_markdown(decks);
+	    import_markdown(clt);
 
-	if (decks.empty())
+	if (clt.empty())
 	    return;
-	current_deck = decks.back();
+	current_deck = clt.back();
     }
 
-    void remove_deck(std::vector<std::shared_ptr<minji::deck>>& deck)
+    void remove_deck(minji::collection& clt)
     {
 	std::cout << "[selection] deck\n";
-	list_deck(deck);
-	std::cout << "  (" << (deck.size() + 1) << ") remove all\n";
+	list_deck(clt);
+	std::cout << "  (" << (clt.size() + 1) << ") remove all\n";
 
 	unsigned idx;
-	auto invalid_in = [size = deck.size()](unsigned idx) {
+	auto invalid_in = [size = clt.size()](unsigned idx) {
 	    return --idx > size;
 	};
 	if (!utils::parse_input_return_empty(idx, invalid_in))
 	    return;
 	--idx;
 
-	if (idx == deck.size()) {
-	    deck.clear();
+	if (idx == clt.size()) {
+	    clt.clear();
 	    return;
 	}
-	std::string name = std::move(deck[idx]->name());
-	deck.erase(deck.begin() + idx);
+	std::string name = std::move(clt[idx]->name());
+	clt.erase(clt.begin() + idx);
 	std::cout << "[message] removed deck: " << name << '\n';
     }
 
@@ -348,15 +350,14 @@ namespace
 	ui::opt opt;
 
 	main_menu();
-	if (!utils::parse_input_return_empty(opt))
+	if (!utils::parse_input(opt))
 	    return ui::opt::exit;
 	std::cout << '\n';
 
 	return opt;
     }
 
-    void exec_opt(ui::opt opt,
-	    std::vector<std::shared_ptr<minji::deck>>& decks)
+    void exec_opt(ui::opt opt, minji::collection& clt)
     {
 	utils::clear_screen();
 	switch (opt) {
@@ -368,9 +369,8 @@ namespace
 		break;
 	    case ui::opt::list_card:
 		if (!current_deck.lock()->size()) {
-		    std::cout << "[message] deck is empty\n"
-			"press Enter to continue...\n";
-		    utils::flush();
+		    std::cout << "[message] deck is empty\n";
+		    utils::prompt_enter();
 		    return;
 		}
 		list_card_menu();
@@ -382,29 +382,26 @@ namespace
 		remove_card();
 		break;
 	    case ui::opt::add_deck:
-		add_deck(decks);
+		add_deck(clt);
 		break;
 	    case ui::opt::list_deck:
 		std::cout << "[list] decks:\n";
-		list_deck(decks);
-		std::cout << "press Enter to continue...\n";
-		utils::flush();
+		list_deck(clt);
+		utils::prompt_enter();
 		break;
 	    case ui::opt::change_deck:
-		change_deck(decks);
+		change_deck(clt);
 		break;
 	    case ui::opt::remove_deck:
-		remove_deck(decks);
+		remove_deck(clt);
 		if (!current_deck.lock())
-		    change_deck(decks);
+		    change_deck(clt);
 		break;
 	    case ui::opt::import_deck:
-		import_markdown(decks);
+		import_markdown(clt);
 		break;
 	    case ui::opt::export_deck:
 		io::export_markdown(current_deck.lock().get());
-		std::cout << "press Enter to continue...\n";
-		utils::flush();
 	    case ui::opt::exit:
 		break;
 	}
@@ -414,11 +411,11 @@ namespace
 
 namespace ui
 {
-    void i_menu(std::vector<std::shared_ptr<minji::deck>> decks)
+    void i_menu(minji::collection& clt)
     {
 	auto opt = ui::opt::change_deck;
 	while (opt != ui::opt::exit) {
-	    exec_opt(opt, decks);
+	    exec_opt(opt, clt);
 	    if (!current_deck.lock() || std::cin.eof())
 		break;
 	    opt = get_opt();

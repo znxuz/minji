@@ -6,6 +6,7 @@
 #include "minji/core/card.h"
 #include "minji/core/answers/answer_factory.h"
 #include "minji/core/answers/plain_answer.h"
+#include "minji/core/collection.h"
 #include "minji/core/deck.h"
 #include "minji/core/card.h"
 #include "minji/io/parse_markdown.h"
@@ -48,8 +49,10 @@ namespace
 
 int main(int argc, char** argv)
 {
-    if (argc == 1)
-	ui::i_menu({get_deck(), parse_example_deck()});
+    if (argc == 1) {
+	minji::collection clt = minji::collection({get_deck(), parse_example_deck()});
+	ui::i_menu(clt);
+    }
     else
 	ui::parse_argv(argc - 1, argv + 1);
 }

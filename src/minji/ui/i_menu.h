@@ -7,6 +7,7 @@
 #include <cstdlib>
 
 #include "menu_opt.h"
+#include "../core/collection.h"
 #include "../core/deck.h"
 #include "../core/deck.h"
 #include "../core/answers/answer_type.h"
@@ -19,6 +20,6 @@
 
 namespace ui
 {
-    void i_menu(std::vector<std::shared_ptr<minji::deck>> decks = {});
+    void i_menu(minji::collection& clt);
 }
 

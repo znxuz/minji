@@ -12,6 +12,11 @@ namespace minji
     {
 	public:
 	    explicit deck(std::string);
+	    deck& operator=(const deck&) = delete;
+	    deck& operator=(deck&&) = default;
+	    deck(deck&) = delete;
+	    deck(deck&&) = default;
+
 	    void add(card);
 	    void remove(std::vector<card>::iterator);
 	    void replace(std::vector<card>::iterator, card);
