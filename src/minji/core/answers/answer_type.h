@@ -18,7 +18,7 @@ namespace minji
 
     inline std::istream& operator>>(std::istream& is, answer_type& ans_type)
     {
-	size_t in;
+	char in;
 	is >> in;
 	ans_type = static_cast<answer_type>(in);
 	if (std::find(begin(ans_types), end(ans_types), ans_type) == ans_types.end())

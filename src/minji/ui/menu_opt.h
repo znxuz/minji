@@ -28,7 +28,7 @@ namespace ui
 	char in;
 	is >> in;
 	opt = static_cast<ui::opt>(in);
-	// possible UB?
+	// UB?
 	if (std::find(begin(opts), end(opts), opt) == opts.end())
 	    is.setstate(std::ios::failbit);
 

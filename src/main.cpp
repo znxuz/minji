@@ -47,6 +47,18 @@ namespace
     }
 }
 
+void test()
+{
+    std::string s;
+    std::istringstream iss("hello test");
+    iss >> s;
+    std::cout << "s.empty(): " << s.empty() << '\n';
+    std::cout << "s: " << s << '\n';
+    std::cout << "eof: " << iss.eof() << '\n';
+    std::cout << "peek(): " << static_cast<char>(iss.peek()) << '\n';
+    std::cout << "peek() == char_traits::eof " << (iss.peek() == std::char_traits<char>::eof()) << '\n';
+}
+
 int main(int argc, char** argv)
 {
     if (argc == 1) {

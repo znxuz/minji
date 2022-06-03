@@ -65,7 +65,7 @@ namespace
 
 	    print_choices();
 	    choice c = choice::next;
-	    if (!utils::parse_input_return_empty(c)) {
+	    if (!utils::parse_input(c)) {
 		randomized_deck.pop_front();
 		randomized_deck.push_back(crd);
 	    } else {

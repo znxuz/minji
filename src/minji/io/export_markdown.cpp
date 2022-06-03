@@ -6,7 +6,7 @@ namespace
     {
 	std::cout << "[confirm] file exists, overwrite? [y/n]\n";
 	std::string input;
-	utils::parse_input_return_empty(input, [](const std::string& s) {
+	utils::parse_input(input, [](const std::string& s) {
 		return !s.empty() && s != "y" && s != "n";
 		});
 	return input.empty() || input == "y";

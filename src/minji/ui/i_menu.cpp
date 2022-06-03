@@ -24,7 +24,7 @@ namespace
 	    std::cout << "  - " << practice_opts[i] << '\n';
 
 	practice_opt opt;
-	if (!utils::parse_input_return_empty(opt))
+	if (!utils::parse_input(opt))
 	    return;
 	std::cout << opt << '\n';
 
@@ -34,7 +34,7 @@ namespace
 		{
 		    std::cout << "[input] number of cards to practice:"
 			"(enter 0 or nothing to cancel)\n";
-		    if (!utils::parse_input_return_empty(count, []
+		    if (!utils::parse_input(count, []
 				(int count) { return count < 0; }) ||
 			    !count)
 			return;
@@ -53,49 +53,38 @@ namespace
 	practice::practice(current_deck.lock().get(), count);
     }
 
-    std::optional<minji::answer_type> select_type()
-    {
-	using  minji::ans_types;
-
-	std::cout << "[selection] answer types: "
-	    "(enter 0 or nothing to cancel)\n";
-	for (size_t i = 0; i < ans_types.size(); ++i)
-	    std::cout << "  (" << (i + 1) << ") " << ans_types[i] << '\n';
-
-	unsigned idx;
-	auto invalid_in = [limit = ans_types.size()](unsigned idx) {
-	    return idx > limit;
-	};
-	if (!utils::parse_input_return_empty(idx, invalid_in) || !idx--)
-	    return std::nullopt;
-	return ans_types[idx];
-    }
-
-    void get_card_info(std::optional<std::string>& opt_descr,
+    void parse_card_info(std::optional<std::string>& opt_descr,
 	    std::optional<std::string>& opt_front,
 	    std::optional<std::unique_ptr<minji::answer>>& opt_back)
     {
 	std::cout << "[input] short description of the card:\n";
 	std::string description;
-	if (!utils::parse_input_return_empty(description))
+	if (!utils::parse_input_getline(description))
 	    return;
 	opt_descr = std::move(description);
 
 	std::cout << "[input] card front:\n";
 	std::string front;
-	if (!utils::parse_input_return_empty(front))
+	if (!utils::parse_input_getline(front))
 	    return;
 	opt_front = std::move(front);
 
-	auto type = select_type();
-	if (!type)
+	using  minji::ans_types;
+	std::cout << "[selection] answer types: "
+	    "(enter nothing to cancel)\n";
+	for (size_t i = 0; i < ans_types.size(); ++i)
+	    std::cout << "  (" << static_cast<char>(ans_types[i]) << ") " <<
+		ans_types[i] << '\n';
+	std::optional<minji::answer_type> type;
+	if (!utils::parse_input(*type))
 	    return;
+
 	switch (*type) {
 	    case minji::answer_type::plain:
 		{
 		    std::string plain_ans;
 		    std::cout << "[input] plain answer:\n";
-		    if (!utils::parse_input_return_empty(plain_ans))
+		    if (!utils::parse_input_getline(plain_ans))
 			return;
 		    opt_back = minji::make_answer(std::move(plain_ans));
 		    break;
@@ -103,35 +92,37 @@ namespace
 	    case minji::answer_type::multiple_choice:
 		{
 		    unsigned ans_count;
-		    std::string sure;
-		    auto invalid_in = [](const std::string& s) {
-			return s.size() > 1 || (s != "y" && s != "n" && s != "c");
+		    char sure;
+		    auto invalid_confirm = [](char c) {
+			return c != 'y' && c != 'n' && c != 'c';
 		    };
 		    do {
 			std::cout << "[input] total number of choices: "
 			    "(enter 0 or nothing to cancel)\n";
-			if (!utils::parse_input_return_empty(ans_count) ||
+			if (!utils::parse_input(ans_count) ||
 				!ans_count)
 			    return;
 			std::cout << "[confirm] total choices: " << ans_count <<
 			    ", sure? [(y)es/(n)o/(c)ancel]\n";
-			if (!utils::parse_input_return_empty(sure, invalid_in) ||
-				sure == "c")
+			while (!utils::parse_input(sure, invalid_confirm));
+			// FIXME
+			if (sure == 'c')
 			    return;
-		    } while (sure != "y");
+		    } while (sure != 'y');
 
 		    std::vector<std::pair<std::string, bool>> choices(ans_count);
 		    for (unsigned i = 0; i < ans_count; ++i) {
 			std::cout << "[input] enter answer " << (i + 1) << ".\n";
 			std::string ans;
-			if (!utils::parse_input_return_empty(ans))
+			if (!utils::parse_input_getline(ans))
 			    return;
 			std::cout << "[confirm] is this answer the correct one?"
 			    "[(y)es/(n)o/(c)ancel]\n";
-			std::string confirm;
-			if (!utils::parse_input_return_empty(confirm, invalid_in) || confirm == "c")
+			char confirm;
+			while (!utils::parse_input(confirm, invalid_confirm));
+			if (confirm == 'c')
 			    return;
-			choices[i] = std::pair(std::move(ans), (confirm == "y"));
+			choices[i] = std::pair(std::move(ans), (confirm == 'y'));
 			std::cout << "[message] added the following answer: " <<
 			    choices[i].first << " -> " << std::boolalpha <<
 			    choices[i].second << "\n";
@@ -143,12 +134,13 @@ namespace
 
     std::optional<minji::card> make_card()
     {
+	// std::tuple
 	std::optional<std::string> description, front;
 	std::optional<std::unique_ptr<minji::answer>> back;
-	get_card_info(description, front, back);
+
+	parse_card_info(description, front, back);
 	if (!description || !front || !back)
 	    return std::nullopt;
-
 	return minji::card_builder::init(current_deck.lock()->name())
 	    .description(*description)
 	    .front(*front)
@@ -191,7 +183,7 @@ namespace
 	    list_card();
 	    std::cout << "[input] card index for the content: "
 		"(enter 0 or nothing to cancel)\n";
-	} while (utils::parse_input_return_empty(idx, invalid_in) && idx);
+	} while (utils::parse_input(idx, invalid_in) && idx);
     }
 
     void change_card()
@@ -203,7 +195,7 @@ namespace
 	auto invalid_in = [limit = current_deck.lock()->size()](size_t idx) {
 	    return idx > limit;
 	};
-	if (!utils::parse_input_return_empty(idx, invalid_in) || !idx--)
+	if (!utils::parse_input(idx, invalid_in) || !idx--)
 	    return;
 
 	auto c = make_card();
@@ -221,7 +213,7 @@ namespace
 	auto invalid_in = [size = current_deck.lock()->size()](size_t idx) {
 	    return idx > size;
 	};
-	if (!utils::parse_input_return_empty(idx, invalid_in) || !idx--)
+	if (!utils::parse_input(idx, invalid_in) || !idx--)
 	    return;
 
 	current_deck.lock()->remove(current_deck.lock()->begin() + idx);
@@ -235,13 +227,13 @@ namespace
 	    if (!p.empty())
 		std::cerr << "[message] path invalid, try again\n";
 	    std::cout << "[input] file path:\n";
-	    if (!utils::parse_input_return_empty(p))
+	    if (!utils::parse_input(p))
 		return;
 	} while (!std::filesystem::exists(p));
 
 	std::cout << "[input] deck name:\n";
 	std::string deck_name;
-	if (!std::getline(std::cin, deck_name))
+	if (!utils::parse_input_getline(deck_name))
 	    return;
 
 	auto deck = io::parse_markdown(p, deck_name);
@@ -265,12 +257,11 @@ namespace
 		    [&name](const auto& deck) { return deck->name() == name; })
 		!= clt.end();
 	};
-
 	do {
 	    if (!name.empty())
 		std::cerr << "[error] deck with the same name exists,"
 		    "try again\n";
-	    if (!utils::parse_input_return_empty(name))
+	    if (!utils::parse_input_getline(name))
 		return;
 	} while (same_name(name));
 
@@ -296,7 +287,7 @@ namespace
 	    return in > limit;
 	};
 	size_t idx;
-	if (!utils::parse_input_return_empty(idx, invalid_in) || !idx--)
+	if (!utils::parse_input(idx, invalid_in) || !idx--)
 	    return;
 
 	if (idx < clt.size()) {
@@ -308,10 +299,7 @@ namespace
 	    add_deck(clt);
 	else
 	    import_markdown(clt);
-
-	if (clt.empty())
-	    return;
-	current_deck = clt.back();
+	change_deck(clt);
     }
 
     void remove_deck(minji::collection& clt)
@@ -324,7 +312,7 @@ namespace
 	auto invalid_in = [size = clt.size()](unsigned idx) {
 	    return --idx > size;
 	};
-	if (!utils::parse_input_return_empty(idx, invalid_in))
+	if (!utils::parse_input(idx, invalid_in))
 	    return;
 	--idx;
 

@@ -15,16 +15,14 @@ obj := $(src:.cpp=.o)
 
 all: compile
 
-compile: generate_cc $(NAME)
-
-run: compile
+run:
 	./$(NAME)
-
-re: fclean compile
 
 debug: CFLAGS += -g
 
 debug: fclean compile
+
+compile: generate_cc $(NAME)
 
 $(NAME): $(obj)
 	$(CC) $(obj) $(SAN) -o $(NAME)

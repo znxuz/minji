@@ -62,4 +62,24 @@ namespace minji
 	return const_cast<deck*>(this)->operator[](i);
     }
 
+    std::vector<card>::iterator deck::begin()
+    {
+	return cards_.begin();
+    }
+
+    std::vector<card>::const_iterator deck::begin() const
+    {
+	return cards_.begin();
+    }
+
+    std::vector<card>::iterator deck::end()
+    {
+	return cards_.end();
+    }
+
+    std::vector<card>::const_iterator deck::end() const
+    {
+	return cards_.end();
+    }
+
 }

@@ -12,10 +12,6 @@ namespace minji
     {
 	public:
 	    explicit deck(std::string);
-	    deck& operator=(const deck&) = delete;
-	    deck& operator=(deck&&) = default;
-	    deck(deck&) = delete;
-	    deck(deck&&) = default;
 
 	    void add(card);
 	    void remove(std::vector<card>::iterator);
@@ -29,14 +25,13 @@ namespace minji
 	    const card& operator[](size_t i) const;
 	    card& operator[](size_t i);
 
-	    std::vector<card>::iterator begin() { return cards_.begin(); }
-	    std::vector<card>::const_iterator begin() const { return cards_.begin(); }
-	    std::vector<card>::iterator end() { return cards_.end() ;}
-	    std::vector<card>::const_iterator end() const { return cards_.end() ;}
+	    std::vector<card>::iterator begin();
+	    std::vector<card>::const_iterator begin() const;
+	    std::vector<card>::iterator end();
+	    std::vector<card>::const_iterator end() const;
 
 	private:
 	    std::string name_;
 	    std::vector<card> cards_;
-
     };
 }
