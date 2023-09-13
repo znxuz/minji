@@ -4,6 +4,6 @@ namespace ui
 {
     void parse_argv(int argc, char** argv)
     {
-	std::cout << "cli options TODO\n";
+        std::cout << "cli options TODO\n";
     }
 }

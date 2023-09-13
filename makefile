@@ -15,14 +15,14 @@ obj := $(src:.cpp=.o)
 
 all: compile
 
-run:
+run: compile
 	./$(NAME)
 
 debug: CFLAGS += -g
 
 debug: fclean compile
 
-compile: generate_cc $(NAME)
+compile: $(NAME)
 
 $(NAME): $(obj)
 	$(CC) $(obj) $(SAN) -o $(NAME)
@@ -36,6 +36,3 @@ clean:
 fclean: clean
 	$(RM) $(NAME)
 	find . -type f -name "*.o" -delete
-
-generate_cc:
-	@echo $(CFLAGS) | sed 's/\s/\n/g' > compile_flags.txt

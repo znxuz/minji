@@ -1,5 +1,6 @@
 *.o
-mj
 *.a
-compile_flags.txt
+mj
+.cache
+compile_commands.json
 Session.vim

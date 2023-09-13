@@ -1,0 +1,16 @@
+---
+Language: Cpp
+BasedOnStyle: WebKit
+
+TabWidth: 8
+IndentWidth: 4
+AccessModifierOffset: -4
+IndentCaseLabels: true
+BreakBeforeBraces: Linux
+NamespaceIndentation: All
+DerivePointerAlignment: false
+SpaceAfterTemplateKeyword: false
+Cpp11BracedListStyle: true
+SpaceBeforeCpp11BracedList: false
+ColumnLimit: 80
+---
